@@ -119,3 +119,5 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Support
 
 For issues or questions about the multi-language features, please check the translation files or create an issue in the repository.
+
+Turning into Mongolian.
