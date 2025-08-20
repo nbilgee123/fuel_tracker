@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ _('Fillup History') }} - {{ _('Fuel Tracker') }}{% endblock %}
+{% block title %}{{ _('Цэнэглэлтийн түүх') }} - {{ _('Цэнэглэлтийн түүх') }}{% endblock %}
 
 {% block content %}
 <div class="space-y-8">
     <div class="text-center">
-        <h2 class="text-3xl font-bold text-foreground mb-2">📋 {{ _('Your Fillup History') }}</h2>
-        <p class="text-muted-foreground">{{ _('Track and analyze your fuel consumption over time') }}</p>
+        <h2 class="text-3xl font-bold text-foreground mb-2">📋 {{ _('Цэнэглэлтийн түүх') }}</h2>
+        <p class="text-muted-foreground">{{ _('Цэнэглэлтийн түүхийг харах') }}</p>
     </div>
     
     {% if fillups %}
@@ -15,7 +15,7 @@
             <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-muted-foreground">{{ _('Total Records') }}</p>
+                        <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт цэнэглэлт') }}</p>
                         <p class="text-2xl font-bold text-foreground">{{ fillups|length }}</p>
                     </div>
                     <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
@@ -29,13 +29,13 @@
             <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-muted-foreground">{{ _('Distance Tracked') }}</p>
+                        <p class="text-sm font-medium text-muted-foreground">{{ _('Замын урт') }}</p>
                         <p class="text-2xl font-bold text-foreground">
                             {% if fillups|length > 1 %}
                                 {% set distance = fillups[-1].odometer_km - fillups[0].odometer_km %}
-                                {{ distance|round|int }} km
+                                {{ distance|round|int }} км
                             {% else %}
-                                -- km
+                                -- км
                             {% endif %}
                         </p>
                     </div>
@@ -50,13 +50,13 @@
             <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-muted-foreground">{{ _('Total Fuel') }}</p>
+                        <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт шатахуун') }}</p>
                         <p class="text-2xl font-bold text-foreground">
                             {% set total_fuel = 0 %}
                             {% for fillup in fillups %}
                                 {% set total_fuel = total_fuel + fillup.fuel_liters %}
                             {% endfor %}
-                            {{ total_fuel|round(1) }} L
+                            {{ total_fuel|round(1) }} л
                         </p>
                     </div>
                     <div class="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-full">
@@ -74,14 +74,14 @@
                 <table class="w-full">
                     <thead class="bg-muted border-b border-border">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Date') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Odometer') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Fuel') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Price/L') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Total Cost') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Efficiency') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Notes') }}</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Actions') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Огноо') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Хурдны хэмжүүр') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Түлш') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Үнэ/л') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Нийт үнэ') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Хэрэглээ') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Тэмдэглэл') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Үйлдэл') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border">
@@ -94,10 +94,10 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">
-                                    {{ fillup.odometer_km|round|int }} km
+                                    {{ fillup.odometer_km|round|int }} км
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                                    {{ fillup.fuel_liters|round(1) }} L
+                                    {{ fillup.fuel_liters|round(1) }} л
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                                     ₮{{ fillup.price_per_liter|round(2) }}
@@ -109,7 +109,7 @@
                                     {% set efficiency = fillup.calculate_efficiency() %}
                                     {% if efficiency %}
                                         <div class="text-sm font-medium text-green-600 dark:text-green-400">{{ efficiency|round(1) }}</div>
-                                        <div class="text-xs text-muted-foreground">L/100km</div>
+                                        <div class="text-xs text-muted-foreground">л/100км</div>
                                     {% else %}
                                         <span class="text-sm text-muted-foreground">--</span>
                                     {% endif %}
@@ -125,10 +125,10 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <form method="POST" action="{{ url_for('main.delete_fillup', id=fillup.id) }}" 
-                                          onsubmit="return confirm('{{ _('Delete this fillup?') }}')" 
+                                          onsubmit="return confirm('{{ _('Энэ цэнэглэлтийг устгах уу?') }}')" 
                                           class="inline">
                                         <button type="submit" class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-3 py-1 rounded-md text-xs font-medium transition-colors">
-                                            🗑️ {{ _('Delete') }}
+                                            🗑️ {{ _('Устгах') }}
                                         </button>
                                     </form>
                                 </td>
@@ -146,7 +146,7 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                {{ _('Add New Fillup') }}
+                {{ _('Шинэ цэнэглэлт нэмэх') }}
             </a>
         </div>
         
@@ -159,14 +159,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-medium text-foreground mb-2">{{ _('No Fillups Yet') }}</h3>
-                <p class="text-muted-foreground mb-6">{{ _('Start tracking your fuel consumption by adding your first fillup!') }}</p>
+                <h3 class="text-lg font-medium text-foreground mb-2">{{ _('Одоогоор цэнэглэлт байхгүй') }}</h3>
+                <p class="text-muted-foreground mb-6">{{ _('Эхний цэнэглэлтээ нэмж шатахууны хэрэглээгээ хяж эхлээрэй!') }}</p>
                 <a href="{{ url_for('main.add_fillup') }}" 
                    class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    {{ _('Add First Fillup') }}
+                    {{ _('Эхний цэнэглэлт нэмэх') }}
                 </a>
             </div>
         </div>

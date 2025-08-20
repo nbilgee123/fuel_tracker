@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ _('Charts & Analytics') }} - {{ _('Fuel Tracker') }}{% endblock %}
+{% block title %}{{ _('График & Дүн шинжилгээ') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
 
 {% block content %}
 <div class="space-y-8">
     <div class="text-center">
-        <h2 class="text-3xl font-bold text-foreground mb-2">📊 {{ _('Fuel Analytics') }}</h2>
-        <p class="text-muted-foreground">{{ _('Analyze your fuel consumption patterns and trends') }}</p>
+        <h2 class="text-3xl font-bold text-foreground mb-2">📊 {{ _('Шатахууны дүн шинжилгээ') }}</h2>
+        <p class="text-muted-foreground">{{ _('Шатахууны хэрэглээний хэв загвар болон чиг хандлагыг шинжилнэ үү') }}</p>
     </div>
     
     {% if fillups|length < 2 %}
@@ -17,15 +17,15 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-medium text-foreground mb-2">{{ _('Need More Data') }}</h3>
-                <p class="text-muted-foreground mb-6">{{ _('At least 2 fillups are required to view charts and analytics.') }}</p>
-                <p class="text-muted-foreground mb-6">{{ _('Add more fillups to see your fuel consumption patterns.') }}</p>
+                <h3 class="text-lg font-medium text-foreground mb-2">{{ _('Илүү их өгөгдөл хэрэгтэй') }}</h3>
+                <p class="text-muted-foreground mb-6">{{ _('График болон дүн шинжилгээг харахын тулд хамгийн багадаа 2 цэнэглэлт шаардлагатай.') }}</p>
+                <p class="text-muted-foreground mb-6">{{ _('Шатахууны хэрэглээний хэв загвараа харахын тулд илүү их цэнэглэлт нэмнэ үү.') }}</p>
                 <a href="{{ url_for('main.add_fillup') }}" 
                    class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    {{ _('Add Fillup') }}
+                    {{ _('Цэнэглэлт нэмэх') }}
                 </a>
             </div>
         </div>
@@ -40,7 +40,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-bold text-foreground mb-2">{{ "%.1f"|format(best_efficiency) }}</p>
-                    <p class="text-sm text-muted-foreground">{{ _('Best Efficiency (L/100km)') }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Хамгийн сайн үр ашиг (л/100км)') }}</p>
                 </div>
             </div>
             
@@ -52,7 +52,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-bold text-foreground mb-2">{{ "%.1f"|format(worst_efficiency) }}</p>
-                    <p class="text-sm text-muted-foreground">{{ _('Worst Efficiency (L/100km)') }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Хамгийн муу үр ашиг (л/100км)') }}</p>
                 </div>
             </div>
             
@@ -64,7 +64,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-bold text-foreground mb-2">{{ "%.2f"|format(avg_price) }}</p>
-                    <p class="text-sm text-muted-foreground">{{ _('Avg Price (per L)') }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Дундаж үнэ (л тутамд)') }}</p>
                 </div>
             </div>
             
@@ -76,7 +76,7 @@
                         </svg>
                     </div>
                     <p class="text-2xl font-bold text-foreground mb-2">{{ "%.0f"|format(total_distance) }}</p>
-                    <p class="text-sm text-muted-foreground">{{ _('Total Distance (km)') }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Нийт зай (км)') }}</p>
                 </div>
             </div>
         </div>

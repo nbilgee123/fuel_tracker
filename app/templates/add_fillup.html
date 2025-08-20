@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ _('Add Fillup') }} - {{ _('Fuel Tracker') }}{% endblock %}
+{% block title %}{{ _('Цэнэглэлт нэмэх') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-foreground mb-2">🚗 {{ _('Add New Fillup') }}</h2>
-        <p class="text-muted-foreground">{{ _('Record your fuel consumption to track efficiency') }}</p>
+        <h2 class="text-3xl font-bold text-foreground mb-2">🚗 {{ _('Шинэ цэнэглэлт нэмэх') }}</h2>
+        <p class="text-muted-foreground">{{ _('Хэрэглээг хяж үр ашгийг тооцоолохын тулд шатахууны хэрэглээг бүртгэнэ үү') }}</p>
     </div>
 
     <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-6">
@@ -37,7 +37,7 @@
                 </label>
                 {{ form.odometer_km(
                     class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
-                    placeholder=_("e.g., 25000")
+                    placeholder=_("жишээ нь: 25000")
                 ) }}
                 {% if form.odometer_km.errors %}
                     <div class="text-sm text-destructive">
@@ -46,7 +46,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <p class="text-sm text-muted-foreground">{{ _('Enter current odometer reading in kilometers') }}</p>
+                <p class="text-sm text-muted-foreground">{{ _('Километрээр одоогийн хурдны хэмжүүрийн уншилтыг оруулна уу') }}</p>
             </div>
             
             <!-- Fuel Amount Field -->
@@ -56,7 +56,7 @@
                 </label>
                 {{ form.fuel_liters(
                     class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
-                    placeholder=_("e.g., 45.5")
+                    placeholder=_("жишээ нь: 45.5")
                 ) }}
                 {% if form.fuel_liters.errors %}
                     <div class="text-sm text-destructive">
@@ -65,7 +65,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <p class="text-sm text-muted-foreground">{{ _('How many liters did you add?') }}</p>
+                <p class="text-sm text-muted-foreground">{{ _('Хэдэн литр нэмсэн бэ?') }}</p>
             </div>
 
             <!-- Fuel Before Fill-up Field -->
@@ -75,7 +75,7 @@
                 </label>
                 {{ form.fuel_before_fillup(
                     class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
-                    placeholder=_("e.g., 12.0")
+                    placeholder=_("жишээ нь: 12.0")
                 ) }}
                 {% if form.fuel_before_fillup.errors %}
                     <div class="text-sm text-destructive">
@@ -84,14 +84,14 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <p class="text-sm text-muted-foreground">{{ _('Approximate liters in tank before this fillup (optional)') }}</p>
+                <p class="text-sm text-muted-foreground">{{ _('Энэ цэнэглэлтийн өмнө саванд байсан ойролцоо литр (сонгох боломжтой)') }}</p>
                 <div id="calculated-fuel-info" class="hidden p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
                     <p class="text-sm text-blue-700 dark:text-blue-300">
-                        <span class="font-medium">{{ _('Calculated fuel before fillup:') }}</span> 
-                        <span id="calculated-fuel-value" class="font-bold"></span> L
+                        <span class="font-medium">{{ _('Тооцоолсон цэнэглэлтийн өмнөх шатахуун:') }}</span> 
+                        <span id="calculated-fuel-value" class="font-bold"></span> л
                     </p>
                     <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                        {{ _('Based on your last fillup and average fuel efficiency. You can adjust this value if needed.') }}
+                        {{ _('Таны сүүлчийн цэнэглэлт болон дундаж шатахууны үр ашгийн үндсэн дээр. Шаардлагатай бол энэ утгыг тохируулж болно.') }}
                     </p>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                         {{ form.is_full_tank.label.text }}
                     </label>
                 </div>
-                <p class="text-sm text-muted-foreground">{{ _('Check if tank was filled to capacity after fillup') }}</p>
+                <p class="text-sm text-muted-foreground">{{ _('Цэнэглэлтийн дараа сав бүрэн дүүрсэн эсэхийг шалгана уу') }}</p>
             </div>
             
             <!-- Price per Liter Field -->
@@ -116,7 +116,7 @@
                 </label>
                 {{ form.price_per_liter(
                     class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
-                    placeholder=_("e.g., 2500")
+                    placeholder=_("жишээ нь: 2500")
                 ) }}
                 {% if form.price_per_liter.errors %}
                     <div class="text-sm text-destructive">
@@ -125,7 +125,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <p class="text-sm text-muted-foreground">{{ _('Price per liter in MNT') }}</p>
+                <p class="text-sm text-muted-foreground">{{ _('Төгрөгөөр литр тутамд үнэ') }}</p>
             </div>
             
             <!-- Notes Field -->
@@ -163,28 +163,28 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
             </div>
-            <h4 class="text-lg font-semibold text-blue-800 dark:text-blue-200">{{ _('Tips for Accurate Recording') }}</h4>
+            <h4 class="text-lg font-semibold text-blue-800 dark:text-blue-200">{{ _('Зөв бүртгэлийн зөвлөмж') }}</h4>
         </div>
         <ul class="space-y-2 text-sm text-blue-700 dark:text-blue-300">
             <li class="flex items-start">
                 <span class="text-blue-500 mr-2">•</span>
-                {{ _('Fill up completely for accurate efficiency calculations') }}
+                {{ _('Зөв үр ашгийн тооцооллын тулд бүрэн цэнэглэнэ үү') }}
             </li>
             <li class="flex items-start">
                 <span class="text-blue-500 mr-2">•</span>
-                {{ _('Record odometer before driving') }}
+                {{ _('Жолоодохын өмнө хурдны хэмжүүрийг бүртгэнэ үү') }}
             </li>
             <li class="flex items-start">
                 <span class="text-blue-500 mr-2">•</span>
-                {{ _('Keep receipts for price verification') }}
+                {{ _('Үнийн баталгаажуулалтын тулд баримтыг хадгална уу') }}
             </li>
             <li class="flex items-start">
                 <span class="text-blue-500 mr-2">•</span>
-                {{ _('Note special driving conditions (city/highway)') }}
+                {{ _('Тусгай жолоодох нөхцөлийг тэмдэглэнэ үү (хот/замын)') }}
             </li>
             <li class="flex items-start">
                 <span class="text-blue-500 mr-2">•</span>
-                <strong>{{ _('Efficiency calculations appear after 2nd fillup') }}</strong>
+                <strong>{{ _('Үр ашгийн тооцоолол 2-р цэнэглэлтийн дараа харагдана') }}</strong>
             </li>
         </ul>
     </div>

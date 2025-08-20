@@ -155,7 +155,7 @@
                 <!-- Fuel Stats -->
                 <div class="flex flex-col space-y-4">
                     <div class="text-center">
-                        <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Савны багтаамжy') }}</p>
+                        <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Савны багтаамж') }}</p>
                         <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</p>
                     </div>
                     
@@ -169,7 +169,7 @@
         
         <div class="mt-6 text-center">
             <p class="text-sm text-muted-foreground">
-                {{ _('Based on') }} {{ "%.1f"|format(fuel_status.efficiency) }} L/100km {{ _('efficiency') }}
+                {{ _('Үндэслэн') }} {{ "%.1f"|format(fuel_status.efficiency) }} л/100км {{ _('үр ашиг') }}
             </p>
             
             {% if fuel_status.distance_driven is not none %}
@@ -211,7 +211,7 @@
                     </div>
                     <div>
                         <span class="font-medium">{{ _('Цэнэглэсэнээс хойшхи өдрүүд:') }}</span><br>
-                        <span class="text-foreground">{{ fuel_status.days_since_fillup }} {{ _('days') }}</span>
+                        <span class="text-foreground">{{ fuel_status.days_since_fillup }} {{ _('өдөр') }}</span>
                     </div>
                     <div>
                         <span class="font-medium">{{ _('Цэнэглэлтийн дараах шатахуун:') }}</span><br>
@@ -226,7 +226,7 @@
                     </p>
                 </div>
                 <p class="text-xs text-muted-foreground mt-2">
-                    {{ _('Using time-based estimation (30 km/day average)') }}
+                    {{ _('Цагийн үндэслэлт ашиглаж байна (30 км/өдөр дундаж)') }}
                 </p>
             </div>
             {% endif %}
@@ -242,9 +242,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
             {% if total_fillups == 0 %}
-                {{ _('Add First Fillup') }}
+                {{ _('Эхний цэнэглэлт') }}
             {% else %}
-                {{ _('Add New Fillup') }}
+                {{ _('Цэнэглэлт нэмэх') }}
             {% endif %}
         </a>
         
@@ -254,7 +254,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
             </svg>
-            {{ _('Check Range') }}
+            {{ _('Замын урт') }}
         </a>
         {% endif %}
         
@@ -263,7 +263,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 100 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
             </svg>
-            {{ _('Vehicle Settings') }}
+            {{ _('Тээврийн хэрэгслийн тохируулалт') }}
         </a>
     </div>
 
@@ -278,8 +278,8 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Fillup History') }}</h3>
-                <p class="text-muted-foreground">{{ _('View and analyze your past fuel records') }}</p>
+                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Цэнэглэлтийн түүх') }}</h3>
+                <p class="text-muted-foreground">{{ _('Түүхийн цэнэглэлтийн түүхийг харах') }}</p>
             </div>
         </a>
 
@@ -292,8 +292,8 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Analytics') }}</h3>
-                <p class="text-muted-foreground">{{ _('Visualize your fuel consumption trends') }}</p>
+                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Аналитик') }}</h3>
+                <p class="text-muted-foreground">{{ _('Цэнэглэлтийн үнэмлэл') }}</p>
             </div>
         </a>
 
@@ -306,8 +306,8 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Map View') }}</h3>
-                <p class="text-muted-foreground">{{ _('See your fillup locations on a map') }}</p>
+                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Газрын Зураг харах') }}</h3>
+                <p class="text-muted-foreground">{{ _('Цэнэглэлтийн байршлыг харах') }}</p>
             </div>
         </a>
     </div>

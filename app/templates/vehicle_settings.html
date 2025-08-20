@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ _('Vehicle Settings') }} - {{ _('Fuel Tracker') }}{% endblock %}
+{% block title %}{{ _('Тээврийн хэрэгслийн тохиргоо') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-foreground mb-2">⚙️ {{ _('Vehicle Settings') }}</h2>
-        <p class="text-muted-foreground">{{ _('Configure your vehicle fuel tank capacity and other settings') }}</p>
+        <h2 class="text-3xl font-bold text-foreground mb-2">⚙️ {{ _('Тээврийн хэрэгслийн тохиргоо') }}</h2>
+        <p class="text-muted-foreground">{{ _('Тээврийн хэрэгслийнхээ шатахууны савны багтаамж болон бусад тохиргоог тохируулна уу') }}</p>
     </div>
     
     <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-6">
@@ -45,7 +45,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <p class="text-sm text-muted-foreground">{{ _('Used for remaining fuel and range calculations') }}</p>
+                <p class="text-sm text-muted-foreground">{{ _('Үлдсэн шатахуун болон зайны тооцоололд ашиглана') }}</p>
             </div>
             
             <div class="flex flex-col sm:flex-row gap-4 pt-4">
@@ -55,7 +55,7 @@
                 
                 <a href="{{ url_for('main.index') }}" 
                    class="flex-1 bg-secondary text-secondary-foreground font-medium py-2 px-4 rounded-md hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors text-center">
-                    {{ _('Cancel') }}
+                    {{ _('Цуцлах') }}
                 </a>
             </div>
         </form>
@@ -69,19 +69,19 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                 </svg>
             </div>
-            <h4 class="text-lg font-semibold text-foreground">{{ _('Current Settings') }}</h4>
+            <h4 class="text-lg font-semibold text-foreground">{{ _('Одоогийн тохиргоо') }}</h4>
         </div>
         <div class="space-y-2 text-sm text-muted-foreground">
             <div class="flex justify-between">
-                <span class="font-medium">{{ _('Vehicle:') }}</span>
+                <span class="font-medium">{{ _('Тээврийн хэрэгсэл:') }}</span>
                 <span class="text-foreground">{{ vehicle.name }}</span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium">{{ _('Tank Capacity:') }}</span>
+                <span class="font-medium">{{ _('Савны багтаамж:') }}</span>
                 <span class="text-foreground">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium">{{ _('Last Updated:') }}</span>
+                <span class="font-medium">{{ _('Сүүлд шинэчилсэн:') }}</span>
                 <span class="text-foreground">{{ vehicle.updated_at.strftime("%Y-%m-%d %H:%M") }}</span>
             </div>
         </div>

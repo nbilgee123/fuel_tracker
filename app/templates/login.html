@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ _('Login') }}{% endblock %}
+{% block title %}{{ _('Нэвтрэх') }}{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto">
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-foreground mb-2">{{ _('Welcome Back') }}</h2>
-        <p class="text-muted-foreground">{{ _('Sign in to your account to continue') }}</p>
+        <h2 class="text-3xl font-bold text-foreground mb-2">{{ _('Дахин тавтай морил') }}</h2>
+        <p class="text-muted-foreground">{{ _('Үргэлжлүүлэхийн тулд бүртгэлдээ нэвтэрнэ үү') }}</p>
     </div>
 
     <div class="bg-card border border-border rounded-lg p-6 shadow-sm">
@@ -19,7 +19,7 @@
                 </label>
                 {{ form.license_number(
                     class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
-                    placeholder=_("Enter your license number")
+                    placeholder=_("Жолооны үнэмлэхний дугаараа оруулна уу")
                 ) }}
                 {% for error in form.license_number.errors %}
                     <p class="text-sm text-destructive">{{ error }}</p>
@@ -32,7 +32,7 @@
                 </label>
                 {{ form.password(
                     class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
-                    placeholder=_("Enter your password")
+                    placeholder=_("Нууц үгээ оруулна уу")
                 ) }}
                 {% for error in form.password.errors %}
                     <p class="text-sm text-destructive">{{ error }}</p>
@@ -48,9 +48,9 @@
         
         <div class="mt-6 text-center">
             <p class="text-sm text-muted-foreground">
-                {{ _("Don't have an account?") }}
+                {{ _("Бүртгэл байхгүй юу?") }}
                 <a href="{{ url_for('main.register') }}" class="font-medium text-primary hover:text-primary/80 transition-colors">
-                    {{ _('Sign up') }}
+                    {{ _('Бүртгүүлэх') }}
                 </a>
             </p>
         </div>
