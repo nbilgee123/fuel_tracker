@@ -4,10 +4,10 @@
 <div class="space-y-8">
     <!-- Welcome Section -->
     <div class="text-center">
-        <p class="text-lg text-muted-foreground mb-4">{{ _('Welcome,') }} <span class="font-semibold text-foreground">{{ current_user.license_number }}</span></p>
+        <p class="text-lg text-muted-foreground mb-4">{{ _('Тавтай Морил,') }} <span class="font-semibold text-foreground">{{ current_user.license_number }}</span></p>
         
-        <h2 class="text-3xl font-bold text-foreground mb-4">{{ _('Fuel Tracker Dashboard') }}</h2>
-        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">{{ _('Monitor your fuel consumption, track vehicle efficiency, and optimize your driving habits.') }}</p>
+        <h2 class="text-3xl font-bold text-foreground mb-4">{{ _('Шатахуун хянах самбар') }}</h2>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">{{ _('Шатахууны хэрэглээгээ хянаж, тээврийн хэрэгслийн хэрэглээг бүртгэх') }}</p>
     </div>
 
     <!-- Quick Stats Cards -->
@@ -15,7 +15,7 @@
         <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-muted-foreground">{{ _('Total Fillups') }}</p>
+                    <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт цэнэглэлт') }}</p>
                     <p class="text-2xl font-bold text-foreground">{{ total_fillups }}</p>
                 </div>
                 <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
@@ -29,7 +29,7 @@
         <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-muted-foreground">{{ _('Average Efficiency') }}</p>
+                    <p class="text-sm font-medium text-muted-foreground">{{ _('Дундаж Үр Ашиг') }}</p>
                     <p class="text-2xl font-bold text-foreground">
                         {% if average_efficiency %}
                             {{ "%.1f"|format(average_efficiency) }} L/100km
@@ -49,7 +49,7 @@
         <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-muted-foreground">{{ _('Total Spent') }}</p>
+                    <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт Зарцуулсан') }}</p>
                     <p class="text-2xl font-bold text-foreground">₮{{ "%.2f"|format(total_spent) }}</p>
                 </div>
                 <div class="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-full">
@@ -70,7 +70,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                 </svg>
             </div>
-            <h3 class="text-xl font-semibold text-foreground">{{ _('Current Fuel Status') }}</h3>
+            <h3 class="text-xl font-semibold text-foreground">{{ _('Одоогийн шатахууны түвшин') }}</h3>
         </div>
         
         <!-- Interactive Fuel Gauge -->
@@ -121,7 +121,7 @@
                                 <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
-                                <span class="text-sm font-medium text-foreground">{{ _('Fuel Level') }}</span>
+                                <span class="text-sm font-medium text-foreground">{{ _('Шатахууны түвшин') }}</span>
                             </div>
                             <span class="text-sm font-semibold text-primary">{{ "%.0f"|format(fuel_status.fuel_percentage) }}%</span>
                         </div>
@@ -155,12 +155,12 @@
                 <!-- Fuel Stats -->
                 <div class="flex flex-col space-y-4">
                     <div class="text-center">
-                        <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Tank Capacity') }}</p>
+                        <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Савны багтаамжy') }}</p>
                         <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</p>
                     </div>
                     
                     <div class="text-center">
-                        <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Predicted Range') }}</p>
+                        <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Урьдчилан таамаглах зам') }}</p>
                         <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ "%.0f"|format(fuel_status.predicted_range) }} km</p>
                     </div>
                 </div>
@@ -174,28 +174,28 @@
             
             {% if fuel_status.distance_driven is not none %}
             <div class="mt-4 p-4 bg-muted/50 rounded-lg">
-                <p class="text-sm text-muted-foreground mb-2">{{ _('Calculation Details:') }}</p>
+                <p class="text-sm text-muted-foreground mb-2">{{ _('Тооцооллын дэлгэрэнгүй:') }}</p>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
                     <div>
-                        <span class="font-medium">{{ _('Last Fillup:') }}</span><br>
+                        <span class="font-medium">{{ _('Сүүлийн цэнэглэлт:') }}</span><br>
                         <span class="text-foreground">{{ fuel_status.last_odometer|round(1) }} km</span>
                     </div>
                     <div>
-                        <span class="font-medium">{{ _('Distance Driven:') }}</span><br>
+                        <span class="font-medium">{{ _('Явсан зай:') }}</span><br>
                         <span class="text-foreground">{{ fuel_status.distance_driven|round(1) }} km</span>
                     </div>
                     <div>
-                        <span class="font-medium">{{ _('Fuel After Fillup:') }}</span><br>
+                        <span class="font-medium">{{ _('Цэнэглэлтийн дараах шатахуун:') }}</span><br>
                         <span class="text-foreground">{{ fuel_status.fuel_after_last_fillup|round(1) }} L</span>
                     </div>
                     <div>
-                        <span class="font-medium">{{ _('Fuel Consumed:') }}</span><br>
+                        <span class="font-medium">{{ _('Хэрэглэсэн шатахуун:') }}</span><br>
                         <span class="text-foreground">{{ fuel_status.fuel_consumed_since_last_fillup|round(1) }} L</span>
                     </div>
                 </div>
                 <div class="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
                     <p class="text-sm text-green-700 dark:text-green-300">
-                        <span class="font-medium">{{ _('Remaining Fuel:') }}</span> 
+                        <span class="font-medium">{{ _('Үлдсэн шатахуун:') }}</span> 
                         {{ fuel_status.fuel_after_last_fillup|round(1) }}L - {{ fuel_status.fuel_consumed_since_last_fillup|round(1) }}L = 
                         <span class="font-bold">{{ fuel_status.remaining_fuel|round(1) }}L</span>
                     </p>
@@ -203,24 +203,24 @@
             </div>
             {% else %}
             <div class="mt-4 p-4 bg-muted/50 rounded-lg">
-                <p class="text-sm text-muted-foreground mb-2">{{ _('Calculation Details:') }}</p>
+                <p class="text-sm text-muted-foreground mb-2">{{ _('Тооцооллын дэлгэрэнгүй мэдээлэл:') }}</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                     <div>
-                        <span class="font-medium">{{ _('Last Fillup:') }}</span><br>
+                        <span class="font-medium">{{ _('Сүүлийн цэнэглэлт:') }}</span><br>
                         <span class="text-foreground">{{ fuel_status.last_odometer|round(1) }} km</span>
                     </div>
                     <div>
-                        <span class="font-medium">{{ _('Days Since Fillup:') }}</span><br>
+                        <span class="font-medium">{{ _('Цэнэглэсэнээс хойшхи өдрүүд:') }}</span><br>
                         <span class="text-foreground">{{ fuel_status.days_since_fillup }} {{ _('days') }}</span>
                     </div>
                     <div>
-                        <span class="font-medium">{{ _('Fuel After Fillup:') }}</span><br>
+                        <span class="font-medium">{{ _('Цэнэглэлтийн дараах шатахуун:') }}</span><br>
                         <span class="text-foreground">{{ fuel_status.fuel_after_last_fillup|round(1) }} L</span>
                     </div>
                 </div>
                 <div class="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
                     <p class="text-sm text-green-700 dark:text-green-300">
-                        <span class="font-medium">{{ _('Remaining Fuel:') }}</span> 
+                        <span class="font-medium">{{ _('Үлдсэн шатахуун:') }}</span> 
                         {{ fuel_status.fuel_after_last_fillup|round(1) }}L - {{ fuel_status.fuel_consumed_since_last_fillup|round(1) }}L = 
                         <span class="text-foreground">{{ fuel_status.remaining_fuel|round(1) }}L</span>
                     </p>

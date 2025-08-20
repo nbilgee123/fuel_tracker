@@ -3,13 +3,6 @@
 A Flask-based fuel consumption tracking application with support for multiple languages including English, Mongolian, Chinese, Russian, and Arabic.
 
 ## Features
-
-- **Multi-language Support**: Available in 5 languages
-  - English (en)
-  - Mongolian (Монгол) - mn
-  - Chinese (中文) - zh
-  - Russian (Русский) - ru
-  - Arabic (العربية) - ar
 - **Fuel Tracking**: Record fuel fill-ups with odometer readings
 - **Efficiency Monitoring**: Calculate and track fuel efficiency
 - **Range Prediction**: Predict driving range based on current fuel and efficiency
@@ -54,75 +47,9 @@ A Flask-based fuel consumption tracking application with support for multiple la
 
 2. **Open your browser** and navigate to `http://localhost:5000`
 
-3. **Change language** using the language selector in the top-right corner of the application
-
-## Language Support
-
-### Supported Languages
-
-| Language | Code | Native Name |
-|----------|------|-------------|
-| English | en | English |
-| Mongolian | mn | Монгол |
-| Chinese | zh | 中文 |
-| Russian | ru | Русский |
-| Arabic | ar | العربية |
-
-### Language Features
-
-- **RTL Support**: Arabic language includes right-to-left text direction support
-- **Localized Content**: All user interface elements are translated
-- **Session Persistence**: Language selection is remembered during the session
-- **Fallback**: Falls back to English if a translation is missing
-
-## Translation Management
-
-### Adding New Languages
-
-1. Create a new directory structure:
-   ```
-   app/translations/[language_code]/LC_MESSAGES/
-   ```
-
-2. Create a `messages.po` file with translations
-
-3. Compile translations:
-   ```bash
-   python compile_translations.py
-   ```
-
-### Updating Translations
-
-1. Edit the `.po` files in the `app/translations/[lang]/LC_MESSAGES/` directory
-2. Run the compilation script:
-   ```bash
-   python compile_translations.py
-   ```
-
-### Translation File Structure
-
-```
-app/translations/
-├── en/LC_MESSAGES/messages.po
-├── mn/LC_MESSAGES/messages.po
-├── zh/LC_MESSAGES/messages.po
-├── ru/LC_MESSAGES/messages.po
-└── ar/LC_MESSAGES/messages.po
-```
-
 ## Configuration
 
 The application configuration is in `config.py`:
-
-```python
-LANGUAGES = {
-    'en': 'English',
-    'mn': 'Монгол',
-    'zh': '中文',
-    'ru': 'Русский',
-    'ar': 'العربية'
-}
-```
 
 ## Development
 
@@ -153,12 +80,6 @@ fuel_tracker/
 
 ## Usage Examples
 
-### Changing Language
-
-1. Use the language dropdown in the top-right corner
-2. Select your preferred language
-3. The application will reload with the new language
-
 ### Adding Fuel Records
 
 1. Navigate to "Add Fill-up" (or translated equivalent)
@@ -173,12 +94,6 @@ fuel_tracker/
 - **Range**: Predict driving distance based on current fuel
 
 ## Troubleshooting
-
-### Common Issues
-
-1. **Translations not working**: Ensure you've compiled the translation files
-2. **Language not changing**: Check that the language code is supported in `config.py`
-3. **Missing translations**: Some strings may not be translated yet
 
 ### Debug Mode
 
