@@ -64,14 +64,27 @@
         .dark .border-sidebar-border { border-color: #1e293b; }
         .dark .bg-accent { background-color: #1e293b; }
         .dark .hover\:bg-accent:hover { background-color: #334155; }
+        /* Inputs in dark mode */
+        .dark .bg-input-background { background-color: #0b1220; }
+        .dark input,
+        .dark textarea,
+        .dark select {
+            background-color: #0b1220;
+            color: #f8fafc;
+            border-color: #1e293b;
+        }
+        .dark input::placeholder,
+        .dark textarea::placeholder {
+            color: #94a3b8;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-background text-foreground">
     <!-- Mobile Sidebar Overlay -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[2000] lg:hidden hidden" onclick="toggleSidebar()"></div>
     
     <!-- Mobile Sidebar -->
-    <div id="mobile-sidebar" class="fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
+    <div id="mobile-sidebar" class="fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border z-[2100] transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
         <div class="flex items-center justify-between p-4 border-b border-sidebar-border">
             <h2 class="text-lg font-semibold text-sidebar-foreground">⛽ {{ _('Шатахуун хянагч') }}</h2>
             <button onclick="toggleSidebar()" class="p-2 rounded-md hover:bg-sidebar-accent text-sidebar-foreground">

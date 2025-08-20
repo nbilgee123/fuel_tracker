@@ -5,7 +5,7 @@
 {% block content %}
 <h2>{{ _('Тээврийн хэрэгслийн байршлын зураг') }}</h2>
 
-<div id="map" style="height:500px; width:100%; margin-top:20px;"></div>
+<div id="map" style="height:500px; width:100%; margin-top:20px; position: relative; z-index: 10;"></div>
 
 <div style="margin-top: 16px; background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
     <div><strong>{{ _('Нийт зай') }}:</strong> <span id="stat-distance">0</span> км</div>
@@ -20,6 +20,11 @@
 <!-- Leaflet CSS & JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+/* Ensure Leaflet controls don't sit above our sidebar */
+.leaflet-control-container { z-index: 1000; }
+</style>
 
 <script>
     var map = L.map('map').setView([34.34, 108.94], 12);
