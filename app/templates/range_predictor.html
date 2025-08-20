@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Явах зай тооцоологч') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
+
+{% block content %}
+<style>
+.range-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.range-form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.form-button {
+    background: #3498db;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-button:hover {
+    background: #2980b9;
+}
+
+.form-button:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.result-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border-left: 4px solid #27ae60;
+}
+
+.result-title {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.result-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #27ae60;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.result-unit {
+    font-size: 16px;
+    color: #6c757d;
+    text-align: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 12px;
+}
+
+.no-data {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 40px;
+}
+
+.info-box {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+    color: #1565c0;
+}
+
+.formula {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 20px 0;
+    font-family: monospace;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+</style>
+
+<div class="range-container">
+    <h2>{{ _('Явах зай тооцоологч') }}</h2>
+    
+    {% if not average_efficiency or total_fillups < 2 %}
+        <div class="no-data">
+            <p>{{ _('Үр ашиг тооцоолж явах зайг урьдчилан таамаглахын тулд дор хаяж 2 цэнэглэлт шаардлагатай.') }}</p>
+            <p>{{ _('Явах зай тооцоологчийг ашиглахын тулд илүү олон цэнэглэлт нэмнэ үү.') }}</p>
+        </div>
+    {% else %}
+        <!-- Efficiency Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ "%.1f"|format(average_efficiency) }}</div>
+                <div class="stat-label">{{ _('Дундаж үр ашиг') }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ "%.1f"|format(best_efficiency) }}</div>
+                <div class="stat-label">{{ _('Хамгийн сайн үр ашиг') }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ "%.1f"|format(worst_efficiency) }}</div>
+                <div class="stat-label">{{ _('Хамгийн муу үр ашиг') }}</div>
+            </div>
+        </div>
+
+        <!-- Range Prediction Form -->
+        <div class="range-form">
+            <h3>{{ _('Явах зайгаа тооцоолох') }}</h3>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label for="current_fuel" class="form-label">{{ _('Одоогийн шатахууны хэмжээ (литр)') }}</label>
+                    <input type="number" 
+                           id="current_fuel" 
+                           name="current_fuel" 
+                           class="form-input" 
+                           step="0.1" 
+                           min="0.1" 
+                           max="200" 
+                           value="{{ current_fuel or '' }}"
+                           placeholder="{{ _('Одоогийн шатахууны хэмжээг оруулна уу') }}"
+                           required>
+                </div>
+                
+                <button type="submit" class="form-button">
+                    {{ _('Явах зайг тооцоолох') }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Calculation Formula -->
+        <div class="formula">
+            <strong>{{ _('Томъёо:') }}</strong> ({{ _('Шатахууны хэмжээ') }} ÷ {{ _('Үр ашиг') }}) × 100 = {{ _('Зай (км)') }}
+        </div>
+
+        <!-- Results -->
+        {% if predicted_range is not none %}
+            <div class="result-section">
+                <div class="result-title">{{ _('Урьдчилан тооцоолсон явах зай') }}</div>
+                <div class="result-value">{{ "%.0f"|format(predicted_range) }}</div>
+                <div class="result-unit">{{ _('километр') }}</div>
+                
+                <div class="info-box">
+                    <strong>{{ _('Таны дундаж үр ашиг') }} {{ "%.1f"|format(average_efficiency) }} {{ _('л/100км') }}</strong><br>
+                    {{ _('Энэ нь ойролцоолол юм. Жолоодлогын нөхцөл, газрын гадарга, ачилтаас хамааран бодит зай өөрчлөгдөж болно.') }}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Tips -->
+        <div class="info-box">
+            <strong>{{ _('Шатахууны хэмнэлтийг сайжруулах зөвлөмж:') }}</strong>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>{{ _('Жигд хурд барьж, огцом хурд авах/тоормослохыг зайлсхийх') }}</li>
+                <li>{{ _('Дугуйн даралтыг зөв хэмжээнд байлгана') }}</li>
+                <li>{{ _('Хэрэгцээгүй жинг машинаас авна') }}</li>
+                <li>{{ _('Агааржуулагчийг боломжит хэмжээнд ашиглана') }}</li>
+                <li>{{ _('Боломжтой бол түгжрэл, өгсүүрээс зайлсхийх маршрутыг төлөвлөнө') }}</li>
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

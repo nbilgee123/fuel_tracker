@@ -1,0 +1,235 @@
+# Chinese translations for Fuel Tracker.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the Fuel Tracker project.
+msgid ""
+msgstr ""
+"Project-Id-Version: Fuel Tracker 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-15 08:00+0000\n"
+"PO-Revision-Date: 2025-08-15 08:00+0000\n"
+"Last-Translator: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.12.1\n"
+
+#: app/forms.py:18
+msgid "Fill-up Date"
+msgstr "加油日期"
+
+#: app/forms.py:22
+msgid "Odometer Reading (km)"
+msgstr "里程表读数 (公里)"
+
+#: app/forms.py:23
+msgid "Odometer reading must be positive"
+msgstr "里程表读数必须为正数"
+
+#: app/forms.py:27
+msgid "Fuel Amount (liters)"
+msgstr "燃油量 (升)"
+
+#: app/forms.py:28
+msgid "Fuel amount must be between 0.1 and 200 liters"
+msgstr "燃油量必须在0.1到200升之间"
+
+#: app/forms.py:32
+msgid "Price per Liter (₮)"
+msgstr "每升价格 (₮)"
+
+#: app/forms.py:33
+msgid "Price must be between ₮100 and ₮20000"
+msgstr "价格必须在₮100到₮20000之间"
+
+#: app/forms.py:36
+msgid "Notes (optional)"
+msgstr "备注 (可选)"
+
+#: app/forms.py:37
+msgid "Gas station, driving conditions, etc."
+msgstr "加油站、驾驶条件等"
+
+#: app/forms.py:40
+msgid "Add Fill-up"
+msgstr "添加加油记录"
+
+#: app/forms.py:50
+msgid "A fill-up with this odometer reading already exists."
+msgstr "已存在此里程表读数的加油记录。"
+
+#: app/forms.py:55
+msgid "Odometer reading must be greater than your last entry (%(reading)s km). If you want to start over, please reset your data."
+msgstr "里程表读数必须大于您上次输入的 (%(reading)s 公里)。如果您想重新开始，请重置您的数据。"
+
+#: app/forms.py:62
+msgid "Vehicle Name"
+msgstr "车辆名称"
+
+#: app/forms.py:63
+msgid "e.g., My Car, Family SUV"
+msgstr "例如：我的车、家用SUV"
+
+#: app/forms.py:66
+msgid "Fuel Tank Capacity (liters)"
+msgstr "油箱容量 (升)"
+
+#: app/forms.py:67
+msgid "Tank capacity must be between 20 and 200 liters"
+msgstr "油箱容量必须在20到200升之间"
+
+#: app/forms.py:68
+msgid "e.g., 50.0"
+msgstr "例如：50.0"
+
+#: app/forms.py:71
+msgid "Save Settings"
+msgstr "保存设置"
+
+#: app/routes.py:35
+msgid "Language changed successfully!"
+msgstr "语言更改成功！"
+
+#: app/routes.py:37
+msgid "Language not supported."
+msgstr "不支持该语言。"
+
+#: app/routes.py:58
+msgid "Fill-up added successfully! Fuel efficiency: %(efficiency).1f L/100km"
+msgstr "加油记录添加成功！燃油效率：%(efficiency).1f 升/100公里"
+
+#: app/routes.py:60
+msgid "Fill-up added successfully! Add more entries to see fuel efficiency."
+msgstr "加油记录添加成功！添加更多记录以查看燃油效率。"
+
+#: app/routes.py:66
+msgid "Error adding fill-up: %(error)s"
+msgstr "添加加油记录时出错：%(error)s"
+
+#: app/routes.py:140
+msgid "Please enter a valid fuel amount greater than 0."
+msgstr "请输入大于0的有效燃油量。"
+
+#: app/routes.py:142
+msgid "Fuel amount seems unusually high. Please check your input."
+msgstr "燃油量似乎异常高。请检查您的输入。"
+
+#: app/routes.py:145
+msgid "Range calculated successfully! Based on your average efficiency of %(efficiency).1f L/100km."
+msgstr "续航里程计算成功！基于您平均%(efficiency).1f 升/100公里的燃油效率。"
+
+#: app/routes.py:148
+msgid "Please enter a valid number for fuel amount."
+msgstr "请输入燃油量的有效数字。"
+
+#: app/routes.py:158
+msgid "Fill-up from %(date)s deleted successfully."
+msgstr "%(date)s的加油记录已成功删除。"
+
+#: app/routes.py:161
+msgid "Error deleting fill-up: %(error)s"
+msgstr "删除加油记录时出错：%(error)s"
+
+#: app/routes.py:175
+msgid "Vehicle settings updated successfully!"
+msgstr "车辆设置更新成功！"
+
+#: app/routes.py:178
+msgid "Error updating vehicle settings: %(error)s"
+msgstr "更新车辆设置时出错：%(error)s"
+
+#: app/templates/base.html:25
+msgid "Fuel Tracker"
+msgstr "燃油追踪器"
+
+#: app/templates/base.html:50
+msgid "Home"
+msgstr "首页"
+
+#: app/templates/base.html:51
+msgid "Add Fill-up"
+msgstr "添加加油记录"
+
+#: app/templates/base.html:52
+msgid "History"
+msgstr "历史记录"
+
+#: app/templates/base.html:53
+msgid "Charts"
+msgstr "图表"
+
+#: app/templates/base.html:54
+msgid "Range"
+msgstr "续航里程"
+
+#: app/templates/base.html:55
+msgid "Settings"
+msgstr "设置"
+
+#: app/templates/index.html:4
+msgid "Welcome to Your Fuel Tracker!"
+msgstr "欢迎使用您的燃油追踪器！"
+
+#: app/templates/index.html:5
+msgid "Track your fuel consumption and monitor your car's efficiency."
+msgstr "追踪您的燃油消耗并监控您汽车的效率。"
+
+#: app/templates/index.html:8
+msgid "Quick Stats"
+msgstr "快速统计"
+
+#: app/templates/index.html:12
+msgid "Total Fill-ups"
+msgstr "总加油次数"
+
+#: app/templates/index.html:18
+msgid "Average Efficiency"
+msgstr "平均效率"
+
+#: app/templates/index.html:25
+msgid "Total Spent"
+msgstr "总花费"
+
+#: app/templates/index.html:32
+msgid "Current Fuel Status"
+msgstr "当前燃油状态"
+
+#: app/templates/index.html:36
+msgid "Tank Capacity"
+msgstr "油箱容量"
+
+#: app/templates/index.html:40
+msgid "Remaining Fuel"
+msgstr "剩余燃油"
+
+#: app/templates/index.html:42
+msgid "full"
+msgstr "满"
+
+#: app/templates/index.html:45
+msgid "Predicted Range"
+msgstr "预计续航里程"
+
+#: app/templates/index.html:50
+msgid "Based on"
+msgstr "基于"
+
+#: app/templates/index.html:50
+msgid "efficiency"
+msgstr "效率"
+
+#: app/templates/index.html:58
+msgid "Record Your First Fill-up"
+msgstr "记录您的第一次加油"
+
+#: app/templates/index.html:60
+msgid "Add Another Fill-up"
+msgstr "添加另一次加油记录"
+
+#: app/templates/index.html:65
+msgid "Check Driving Range"
+msgstr "检查驾驶续航里程"
+
+#: app/templates/index.html:69
+msgid "Vehicle Settings"
+msgstr "车辆设置"

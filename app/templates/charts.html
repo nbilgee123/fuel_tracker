@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Charts & Analytics') }} - {{ _('Fuel Tracker') }}{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <div class="text-center">
+        <h2 class="text-3xl font-bold text-foreground mb-2">📊 {{ _('Fuel Analytics') }}</h2>
+        <p class="text-muted-foreground">{{ _('Analyze your fuel consumption patterns and trends') }}</p>
+    </div>
+    
+    {% if fillups|length < 2 %}
+        <div class="text-center py-12">
+            <div class="mx-auto max-w-md">
+                <div class="mx-auto h-12 w-12 text-muted-foreground mb-4">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-foreground mb-2">{{ _('Need More Data') }}</h3>
+                <p class="text-muted-foreground mb-6">{{ _('At least 2 fillups are required to view charts and analytics.') }}</p>
+                <p class="text-muted-foreground mb-6">{{ _('Add more fillups to see your fuel consumption patterns.') }}</p>
+                <a href="{{ url_for('main.add_fillup') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    {{ _('Add Fillup') }}
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="text-center">
+                    <div class="p-3 bg-green-100 dark:bg-green-900/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <p class="text-2xl font-bold text-foreground mb-2">{{ "%.1f"|format(best_efficiency) }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Best Efficiency (L/100km)') }}</p>
+                </div>
+            </div>
+            
+            <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="text-center">
+                    <div class="p-3 bg-red-100 dark:bg-red-900/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+                        </svg>
+                    </div>
+                    <p class="text-2xl font-bold text-foreground mb-2">{{ "%.1f"|format(worst_efficiency) }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Worst Efficiency (L/100km)') }}</p>
+                </div>
+            </div>
+            
+            <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="text-center">
+                    <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <p class="text-2xl font-bold text-foreground mb-2">{{ "%.2f"|format(avg_price) }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Avg Price (per L)') }}</p>
+                </div>
+            </div>
+            
+            <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="text-center">
+                    <div class="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <p class="text-2xl font-bold text-foreground mb-2">{{ "%.0f"|format(total_distance) }}</p>
+                    <p class="text-sm text-muted-foreground">{{ _('Total Distance (km)') }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Spending Chart -->
+        <div class="chart-section">
+            <div class="chart-title">{{ _('Сарын шатахуунд зарцуулалт') }}</div>
+            <div class="chart-container">
+                <canvas id="spendingChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Monthly Volume Chart -->
+        <div class="chart-section">
+            <div class="chart-title">{{ _('Сарын шатахууны хэмжээ') }}</div>
+            <div class="chart-container">
+                <canvas id="volumeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Efficiency Over Time Chart -->
+        <div class="chart-section">
+            <div class="chart-title">{{ _('Үр ашгийн өөрчлөлт (цаг хугацаагаар)') }}</div>
+            <div class="chart-container">
+                <canvas id="efficiencyChart"></canvas>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if fillups|length >= 2 %}
+<!-- Embed datasets as JSON so the JS below is pure JavaScript (no Jinja code) -->
+<script id="spending-labels" type="application/json">{{ spending_labels|tojson }}</script>
+<script id="spending-data" type="application/json">{{ spending_data|tojson }}</script>
+<script id="volume-labels" type="application/json">{{ volume_labels|tojson }}</script>
+<script id="volume-data" type="application/json">{{ volume_data|tojson }}</script>
+<script id="efficiency-labels" type="application/json">{{ efficiency_labels|tojson }}</script>
+<script id="efficiency-data" type="application/json">{{ efficiency_data|tojson }}</script>
+
+<script>
+// Parse embedded JSON datasets
+const spendingLabels = JSON.parse(document.getElementById('spending-labels').textContent || '[]');
+const spendingData = JSON.parse(document.getElementById('spending-data').textContent || '[]');
+const volumeLabels = JSON.parse(document.getElementById('volume-labels').textContent || '[]');
+const volumeData = JSON.parse(document.getElementById('volume-data').textContent || '[]');
+const efficiencyLabels = JSON.parse(document.getElementById('efficiency-labels').textContent || '[]');
+const efficiencyData = JSON.parse(document.getElementById('efficiency-data').textContent || '[]');
+
+// Spending Chart
+const spendingCtx = document.getElementById('spendingChart').getContext('2d');
+new Chart(spendingCtx, {
+    type: 'bar',
+    data: {
+        labels: spendingLabels,
+        datasets: [{
+            label: '{{ _("Сарын зарцуулалт") }}',
+            data: spendingData,
+            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+            borderColor: 'rgba(52, 152, 219, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: '{{ _("Дүн") }}'
+                }
+            }
+        }
+    }
+});
+
+// Volume Chart
+const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+new Chart(volumeCtx, {
+    type: 'line',
+    data: {
+        labels: volumeLabels,
+        datasets: [{
+            label: '{{ _("Сарын хэмжээ") }}',
+            data: volumeData,
+            borderColor: 'rgba(46, 204, 113, 1)',
+            backgroundColor: 'rgba(46, 204, 113, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: '{{ _("Литр") }}'
+                }
+            }
+        }
+    }
+});
+
+// Efficiency Chart
+const efficiencyCtx = document.getElementById('efficiencyChart').getContext('2d');
+new Chart(efficiencyCtx, {
+    type: 'line',
+    data: {
+        labels: efficiencyLabels,
+        datasets: [{
+            label: '{{ _("Үр ашиг") }}',
+            data: efficiencyData,
+            borderColor: 'rgba(155, 89, 182, 1)',
+            backgroundColor: 'rgba(155, 89, 182, 0.1)',
+            borderWidth: 3,
+            fill: false,
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: '{{ _("л/100км") }}'
+                }
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+{% endblock %}
