@@ -47,14 +47,18 @@ class FillUpForm(FlaskForm):
         """Custom validation to ensure odometer reading makes sense"""
         # We'll import here to avoid circular imports
         from app.models import FillUp
+        from flask_login import current_user
         
         # Check if this odometer reading already exists
-        existing = FillUp.query.filter_by(odometer_km=field.data).first()
+        existing = FillUp.query.filter_by(user_id=getattr(current_user, 'id', None), odometer_km=field.data).first() if getattr(current_user, 'is_authenticated', False) else None
         if existing:
             raise ValidationError(_('A fill-up with this odometer reading already exists.'))
         
         # Check if this reading is less than the most recent reading
-        latest = FillUp.query.order_by(FillUp.odometer_km.desc()).first()
+        latest = (
+            FillUp.query.filter_by(user_id=current_user.id).order_by(FillUp.odometer_km.desc()).first()
+            if getattr(current_user, 'is_authenticated', False) else None
+        )
         if latest and field.data <= latest.odometer_km:
             raise ValidationError(_('Odometer reading must be greater than your last entry (%(reading)s km). If you want to start over, please reset your data.', reading=latest.odometer_km))
 

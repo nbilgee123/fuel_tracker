@@ -48,6 +48,8 @@ def register():
             user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
+            # Ensure a default vehicle exists for this user
+            Vehicle.get_current_vehicle(user.id)
             flash(_('Account created. You can log in now.'), 'success')
             return redirect(url_for('main.login'))
     return render_template('register.html', form=form)
@@ -61,7 +63,8 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(license_number=form.license_number.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user)
+            # Remember login across browser sessions
+            login_user(user, remember=True)
             flash(_('Logged in successfully.'), 'success')
             next_page = request.args.get('next')
             return redirect(next_page or url_for('main.index'))

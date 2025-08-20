@@ -19,6 +19,8 @@ def get_locale():
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    # Ensure session permanence
+    app.config.setdefault('SESSION_PERMANENT', True)
     
     # FIX: Set locale selector BEFORE initializing Babel
     babel.locale_selector = get_locale
@@ -26,7 +28,7 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     babel.init_app(app)
-    migrate.init_app(app)
+    migrate.init_app(app, db)
     login_manager.init_app(app)
     
     # Make functions available in templates
