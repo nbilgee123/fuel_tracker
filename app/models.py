@@ -21,6 +21,12 @@ class TriPoint(db.Model):
     # Odometer reading in kilometers
     odometer_km = db.Column(db.Float, nullable=False)
     
+    # GPS accuracy in meters (optional)
+    accuracy = db.Column(db.Float)
+    
+    def __repr__(self):
+        return f'<TriPoint {self.lat:.6f}, {self.lon:.6f} at {self.trip_date}>'
+    
 
 class Vehicle(db.Model):
     """Model to store vehicle settings including fuel tank capacity"""

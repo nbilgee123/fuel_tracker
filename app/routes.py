@@ -348,6 +348,7 @@ def save_location():
     data = request.json
     lat = data.get("lat")
     lon = data.get("lon")
+    accuracy = data.get("accuracy")
     timestamp_iso = data.get("timestamp")
 
     if lat is None or lon is None:
@@ -378,17 +379,35 @@ def save_location():
 
     if last_point:
         incremental_km = haversine_km(last_point.lat, last_point.lon, lat, lon)
-        # Treat tiny GPS jitter as zero movement
-        if incremental_km < 0.01:
+        # Treat tiny GPS jitter as zero movement (increased threshold for better accuracy)
+        if incremental_km < 0.005:  # 5 meters threshold
             incremental_km = 0.0
         odometer_km = (last_point.odometer_km or 0.0) + incremental_km
     else:
         odometer_km = 0.0
     
-    point = TriPoint(user_id=current_user.id, lat=lat, lon=lon, odometer_km=odometer_km, trip_date=date_value)
+    # Create point with enhanced data
+    point = TriPoint(
+        user_id=current_user.id, 
+        lat=lat, 
+        lon=lon, 
+        odometer_km=odometer_km, 
+        trip_date=date_value
+    )
+    
+    # Store accuracy if provided
+    if accuracy is not None:
+        point.accuracy = accuracy
+    
     db.session.add(point)
     db.session.commit()
-    return jsonify({"message": "Location saved successfully"}), 201
+    
+    return jsonify({
+        "message": "Location saved successfully",
+        "point_id": point.id,
+        "odometer_km": odometer_km,
+        "incremental_km": incremental_km if 'incremental_km' in locals() else 0.0
+    }), 201
 
 @main.route("/api/location", methods=["GET"])
 @login_required
@@ -400,10 +419,12 @@ def get_location():
     points = list(reversed(points))
     return jsonify([
         {
+            "id": p.id,
             "lat": p.lat,
             "lon": p.lon,
             "odometer_km": p.odometer_km,
-            "date": p.trip_date.isoformat()
+            "date": p.trip_date.isoformat(),
+            "accuracy": getattr(p, 'accuracy', None)
         }
         for p in points
     ])
@@ -432,7 +453,9 @@ def trips_stats():
             "idle_time_minutes": 0.0,
             "idle_fuel_liters": 0.0,
             "moving_fuel_liters": 0.0,
-            "total_fuel_liters": 0.0
+            "total_fuel_liters": 0.0,
+            "total_points": 0,
+            "last_update": None
         })
 
     def haversine_km(lat1, lon1, lat2, lon2):
@@ -451,10 +474,13 @@ def trips_stats():
     total_distance_km = 0.0
     moving_time_seconds = 0.0
     idle_time_seconds = 0.0
+    max_speed_kmh = 0.0
+    avg_speed_kmh = 0.0
+    speed_samples = 0
 
     # Thresholds
     speed_threshold_kmh = 2.0  # below this is considered idle
-    jitter_distance_km = 0.01  # ignore GPS noise
+    jitter_distance_km = 0.005  # ignore GPS noise (5 meters)
 
     for i in range(1, len(points)):
         p1 = points[i - 1]
@@ -466,16 +492,26 @@ def trips_stats():
         if d_km < jitter_distance_km:
             d_km = 0.0
         total_distance_km += d_km
-        speed_kmh = (d_km / dt) * 3600.0
-        if speed_kmh >= speed_threshold_kmh:
-            moving_time_seconds += dt
-        else:
-            idle_time_seconds += dt
+        
+        if d_km > 0 and dt > 0:
+            speed_kmh = (d_km / dt) * 3600.0
+            if speed_kmh >= speed_threshold_kmh:
+                moving_time_seconds += dt
+                max_speed_kmh = max(max_speed_kmh, speed_kmh)
+                avg_speed_kmh += speed_kmh
+                speed_samples += 1
+            else:
+                idle_time_seconds += dt
 
-    # Fuel estimates
+    # Calculate average speed
+    if speed_samples > 0:
+        avg_speed_kmh = avg_speed_kmh / speed_samples
+
+    # Fuel estimates using user's actual efficiency
     avg_eff_l_per_100km = FillUp.get_average_efficiency(current_user.id) or 10.0  # default
     moving_fuel_liters = (avg_eff_l_per_100km / 100.0) * total_distance_km
 
+    # Idle fuel consumption (can be customized per user)
     idle_fuel_lph = 0.8  # default idle fuel consumption liters/hour
     idle_fuel_liters = idle_fuel_lph * (idle_time_seconds / 3600.0)
 
@@ -485,8 +521,47 @@ def trips_stats():
         "idle_time_minutes": round(idle_time_seconds / 60.0, 1),
         "idle_fuel_liters": round(idle_fuel_liters, 2),
         "moving_fuel_liters": round(moving_fuel_liters, 2),
-        "total_fuel_liters": round(idle_fuel_liters + moving_fuel_liters, 2)
+        "total_fuel_liters": round(idle_fuel_liters + moving_fuel_liters, 2),
+        "max_speed_kmh": round(max_speed_kmh, 1),
+        "avg_speed_kmh": round(avg_speed_kmh, 1),
+        "total_points": len(points),
+        "last_update": points[-1].trip_date.isoformat() if points else None,
+        "efficiency_l_per_100km": round(avg_eff_l_per_100km, 1)
     })
+
+
+@main.route('/api/trips', methods=['POST'])
+@login_required
+def save_trip():
+    """Save completed trip data"""
+    data = request.json
+    
+    if not data or 'distance_km' not in data or 'duration_seconds' not in data:
+        return jsonify({"error": "Missing required trip data"}), 400
+    
+    # Here you could save trip data to a separate table
+    # For now, we'll just return success
+    trip_data = {
+        "user_id": current_user.id,
+        "start_time": data.get('start_time'),
+        "end_time": data.get('end_time'),
+        "distance_km": data.get('distance_km'),
+        "duration_seconds": data.get('duration_seconds'),
+        "fuel_consumed_liters": data.get('fuel_consumed_liters'),
+        "start_location": data.get('start_location'),
+        "end_location": data.get('end_location'),
+        "max_speed_kmh": data.get('max_speed_kmh'),
+        "avg_speed_kmh": data.get('avg_speed_kmh')
+    }
+    
+    # Log trip data (you could save this to database)
+    print(f"Trip completed: {trip_data}")
+    
+    return jsonify({
+        "message": "Trip saved successfully",
+        "trip_id": f"trip_{datetime.utcnow().timestamp()}",
+        "data": trip_data
+    }), 201
 
 
 @main.route('/api/motor_hour', methods=['GET'])

@@ -3,103 +3,510 @@
 {% block title %}{{ _('Газрын зураг') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
 
 {% block content %}
-<h2>{{ _('Тээврийн хэрэгслийн байршлын зураг') }}</h2>
+<div class="max-w-7xl mx-auto">
+    <div class="text-center mb-6">
+        <h2 class="text-3xl font-bold text-foreground mb-2">🗺️ {{ _('Газрын зураг & Зай хяналт') }}</h2>
+        <p class="text-muted-foreground">{{ _('GPS-аар байршил хянаж, зай болон шатахууны зарцуулалтыг тооцоолно') }}</p>
+    </div>
 
-<div id="map" style="height:500px; width:100%; margin-top:20px; position: relative; z-index: 10;"></div>
+    <!-- Map Controls -->
+    <div class="bg-card border border-border rounded-lg p-4 mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-4">
+                <button id="start-tracking" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    {{ _('Хяналт эхлүүлэх') }}
+                </button>
+                <button id="stop-tracking" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors hidden">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    {{ _('Хяналт зогсоох') }}
+                </button>
+                <button id="clear-path" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                    {{ _('Зам цэвэрлэх') }}
+                </button>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-foreground">{{ _('Газрын зургийн төрөл:') }}</label>
+                <select id="map-type" class="px-3 py-2 border border-border rounded-md bg-input-background text-foreground">
+                    <option value="osm">{{ _('OpenStreetMap') }}</option>
+                    <option value="satellite">{{ _('Сансрын зураг') }}</option>
+                    <option value="terrain">{{ _('Гадарга') }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
 
-<div style="margin-top: 16px; background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-    <div><strong>{{ _('Нийт зай') }}:</strong> <span id="stat-distance">0</span> км</div>
-    <div><strong>{{ _('Хөдлөх хугацаа') }}:</strong> <span id="stat-moving">0</span> мин</div>
-    <div><strong>{{ _('Зогсох хугацаа') }}:</strong> <span id="stat-idle">0</span> мин</div>
-    <div><strong>{{ _('Хөдөлгөөнд зарцуулсан шатахуун') }}:</strong> <span id="stat-fuel-moving">0</span> Л</div>
-    <div><strong>{{ _('Зогсолтод зарцуулсан шатахуун') }}:</strong> <span id="stat-fuel-idle">0</span> Л</div>
-    <div><strong>{{ _('Нийт зарцуулсан шатахуун') }}:</strong> <span id="stat-fuel-total">0</span> Л</div>
-    <div><strong>{{ _('Зогсолтын зарцуулалт (л/ц, сүүлийн интервал)') }}:</strong> <span id="stat-idle-lph">-</span></div>
-  </div>
+    <!-- Map Container -->
+    <div class="bg-card border border-border rounded-lg p-4 mb-6">
+        <div id="map" class="h-96 w-full rounded-lg"></div>
+    </div>
+
+    <!-- Trip Information -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Current Trip Stats -->
+        <div class="bg-card border border-border rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-foreground mb-4">{{ _('Одоогийн аялал') }}</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary" id="current-distance">0.0</div>
+                    <div class="text-sm text-muted-foreground">{{ _('Зай (км)') }}</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600" id="current-duration">00:00</div>
+                    <div class="text-sm text-muted-foreground">{{ _('Хугацаа') }}</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-600" id="current-speed">0.0</div>
+                    <div class="text-sm text-muted-foreground">{{ _('Хурд (км/ц)') }}</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-600" id="current-fuel">0.0</div>
+                    <div class="text-sm text-muted-foreground">{{ _('Шатахуун (л)') }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Stats -->
+        <div class="bg-card border border-border rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-foreground mb-4">{{ _('Нийт статистик') }}</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-muted-foreground">{{ _('Нийт зай:') }}</span>
+                    <span class="font-medium text-foreground" id="total-distance">0.0 км</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-muted-foreground">{{ _('Хөдлөх хугацаа:') }}</span>
+                    <span class="font-medium text-foreground" id="total-moving">0 мин</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-muted-foreground">{{ _('Зогсох хугацаа:') }}</span>
+                    <span class="font-medium text-foreground" id="total-idle">0 мин</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-muted-foreground">{{ _('Нийт шатахуун:') }}</span>
+                    <span class="font-medium text-foreground" id="total-fuel">0.0 Л</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Input -->
+    <div class="bg-card border border-border rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-foreground mb-4">{{ _('Байршил оруулах') }}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-foreground mb-2">{{ _('Өргөрөг (Latitude)') }}</label>
+                <input type="number" id="manual-lat" step="0.000001" class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-foreground mb-2">{{ _('Уртраг (Longitude)') }}</label>
+                <input type="number" id="manual-lon" step="0.000001" class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground">
+            </div>
+        </div>
+        <div class="mt-4">
+            <button id="add-manual-point" class="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+                {{ _('Байршил нэмэх') }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Notification System -->
+<div id="notification-container" class="fixed top-4 right-4 z-[3000] space-y-2"></div>
 
 <!-- Leaflet CSS & JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
-/* Ensure Leaflet controls don't sit above our sidebar */
 .leaflet-control-container { z-index: 1000; }
+.leaflet-popup-content { color: #000; }
 </style>
 
 <script>
-    var map = L.map('map').setView([34.34, 108.94], 12);
+let map, marker, path, currentTrip;
+let isTracking = false;
+let tripStartTime, tripStartLocation;
+let currentTripDistance = 0;
+let currentTripDuration = 0;
+let currentTripFuel = 0;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
-    }).addTo(map);
+// Initialize map
+function initMap() {
+    map = L.map('map').setView([47.9184, 106.9177], 13); // Ulaanbaatar coordinates
+    
+    // Map layers
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    });
+    
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: '© Esri'
+    });
+    
+    const terrainLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: '© OpenTopoMap'
+    });
+    
+    // Add default layer
+    osmLayer.addTo(map);
+    
+    // Store layers for switching
+    window.mapLayers = {
+        osm: osmLayer,
+        satellite: satelliteLayer,
+        terrain: terrainLayer
+    };
+    
+    // Initialize path and marker
+    path = L.polyline([], { color: 'blue', weight: 4, opacity: 0.7 });
+    marker = L.marker([47.9184, 106.9177]).addTo(map);
+    
+    // Add path to map
+    path.addTo(map);
+}
 
-    var marker = L.marker([34.34, 108.94]).addTo(map);
-    var path = L.polyline([], { color: 'blue', weight: 4 }).addTo(map);
+// Switch map layers
+function switchMapLayer(layerType) {
+    // Remove all layers
+    Object.values(window.mapLayers).forEach(layer => {
+        map.removeLayer(layer);
+    });
+    
+    // Add selected layer
+    window.mapLayers[layerType].addTo(map);
+}
 
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(function (pos) {
-            var lat = pos.coords.latitude;
-            var lon = pos.coords.longitude;
-
-            // Update marker
-            marker.setLatLng([lat, lon]);
-            map.setView([lat, lon], 14);
-
-            // Append to polyline
-            path.addLatLng([lat, lon]);
-
-            // Send data to backend
-            fetch("/api/location", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ lat: lat, lon: lon, timestamp: new Date().toISOString() })
-            })
-            .then(res => res.json())
-            .then(data => console.log("Saved:", data));
-        });
+// Start tracking
+function startTracking() {
+    if (!navigator.geolocation) {
+        alert('{{ _("Таны төхөөрөмж GPS-д дэмжлэг үзүүлдэггүй") }}');
+        return;
     }
+    
+    isTracking = true;
+    tripStartTime = new Date();
+    tripStartLocation = null;
+    currentTripDistance = 0;
+    currentTripDuration = 0;
+    currentTripFuel = 0;
+    
+    document.getElementById('start-tracking').classList.add('hidden');
+    document.getElementById('stop-tracking').classList.remove('hidden');
+    
+    // Start watching position
+    window.watchId = navigator.geolocation.watchPosition(
+        updatePosition,
+        handleLocationError,
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+    );
+    
+    // Update timer
+    window.tripTimer = setInterval(updateTripTimer, 1000);
+}
 
-    // Load existing path on load
+// Stop tracking
+function stopTracking() {
+    isTracking = false;
+    
+    if (window.watchId) {
+        navigator.geolocation.clearWatch(window.watchId);
+    }
+    
+    if (window.tripTimer) {
+        clearInterval(window.tripTimer);
+    }
+    
+    document.getElementById('start-tracking').classList.remove('hidden');
+    document.getElementById('stop-tracking').classList.add('hidden');
+    
+    // Save trip data
+    if (currentTripDistance > 0) {
+        saveTripData();
+    }
+}
+
+// Update position
+function updatePosition(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const accuracy = position.coords.accuracy;
+    
+    // Update marker
+    marker.setLatLng([lat, lon]);
+    
+    // Center map on first position
+    if (!tripStartLocation) {
+        tripStartLocation = [lat, lon];
+        map.setView([lat, lon], 15);
+    }
+    
+    // Add to path
+    path.addLatLng([lat, lon]);
+    
+    // Calculate distance if we have a previous point
+    if (path.getLatLngs().length > 1) {
+        const points = path.getLatLngs();
+        const prevPoint = points[points.length - 2];
+        const distance = prevPoint.distanceTo([lat, lon]) / 1000; // Convert to km
+        currentTripDistance += distance;
+        
+        // Update current trip stats
+        updateCurrentTripStats();
+    }
+    
+    // Send to backend
+    saveLocation(lat, lon, accuracy);
+}
+
+// Handle location errors
+function handleLocationError(error) {
+    console.error('Location error:', error);
+    let message = '{{ _("Байршил авахад алдаа гарлаа") }}';
+    
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            message = '{{ _("Байршлын зөвшөөрөл татгалзагдсан") }}';
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = '{{ _("Байршлын мэдээлэл боломжгүй") }}';
+            break;
+        case error.TIMEOUT:
+            message = '{{ _("Байршил авах хугацаа хэтэрсэн") }}';
+            break;
+    }
+    
+    alert(message);
+}
+
+// Update current trip timer
+function updateTripTimer() {
+    if (tripStartTime) {
+        const now = new Date();
+        currentTripDuration = Math.floor((now - tripStartTime) / 1000);
+        
+        const minutes = Math.floor(currentTripDuration / 60);
+        const seconds = currentTripDuration % 60;
+        document.getElementById('current-duration').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+}
+
+// Update current trip statistics
+function updateCurrentTripStats() {
+    document.getElementById('current-distance').textContent = currentTripDistance.toFixed(1);
+    
+    // Calculate speed (km/h)
+    if (currentTripDuration > 0) {
+        const speed = (currentTripDistance / currentTripDuration) * 3600;
+        document.getElementById('current-speed').textContent = speed.toFixed(1);
+    }
+    
+    // Calculate fuel consumption using user's actual efficiency
+    // This will be updated when we get the stats from the backend
+    if (window.userEfficiency) {
+        currentTripFuel = (currentTripDistance / 100) * window.userEfficiency;
+        document.getElementById('current-fuel').textContent = currentTripFuel.toFixed(2);
+    }
+}
+
+// Save location to backend
+function saveLocation(lat, lon, accuracy) {
+    fetch("/api/location", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            lat: lat, 
+            lon: lon, 
+            accuracy: accuracy,
+            timestamp: new Date().toISOString() 
+        })
+    })
+    .then(res => res.json())
+    .then(data => console.log("Location saved:", data))
+    .catch(err => console.error("Error saving location:", err));
+}
+
+// Save trip data
+function saveTripData() {
+    const endLocation = path.getLatLngs()[path.getLatLngs().length - 1];
+    
+    const tripData = {
+        start_time: tripStartTime.toISOString(),
+        end_time: new Date().toISOString(),
+        distance_km: currentTripDistance,
+        duration_seconds: currentTripDuration,
+        fuel_consumed_liters: currentTripFuel,
+        start_location: tripStartLocation,
+        end_location: endLocation ? [endLocation.lat, endLocation.lng] : null
+    };
+    
+    // Send trip data to backend
+    fetch('/api/trips', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(tripData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Trip saved:", data);
+        // Show success message
+        showNotification('{{ _("Аялал амжилттай хадгалагдлаа") }}', 'success');
+    })
+    .catch(err => {
+        console.error("Error saving trip:", err);
+        showNotification('{{ _("Аялал хадгалахад алдаа гарлаа") }}', 'error');
+    });
+}
+
+// Clear path
+function clearPath() {
+    path.setLatLngs([]);
+    currentTripDistance = 0;
+    currentTripDuration = 0;
+    currentTripFuel = 0;
+    updateCurrentTripStats();
+}
+
+// Add manual point
+function addManualPoint() {
+    const lat = parseFloat(document.getElementById('manual-lat').value);
+    const lon = parseFloat(document.getElementById('manual-lon').value);
+    
+    if (isNaN(lat) || isNaN(lon)) {
+        alert('{{ _("Зөв координат оруулна уу") }}');
+        return;
+    }
+    
+    // Add to path
+    path.addLatLng([lat, lon]);
+    
+    // Move marker
+    marker.setLatLng([lat, lon]);
+    
+    // Center map
+    map.setView([lat, lon], 15);
+    
+    // Clear inputs
+    document.getElementById('manual-lat').value = '';
+    document.getElementById('manual-lon').value = '';
+}
+
+// Load existing path
+function loadExistingPath() {
     fetch('/api/location?limit=1000')
         .then(r => r.json())
         .then(points => {
             if (points && points.length) {
-                var latlngs = points.map(p => [p.lat, p.lon]);
+                const latlngs = points.map(p => [p.lat, p.lon]);
                 path.setLatLngs(latlngs);
-                var last = latlngs[latlngs.length - 1];
-                marker.setLatLng(last);
-                map.setView(last, 14);
-            }
-        });
-
-    function refreshStats() {
-        fetch('/api/trips/stats')
-            .then(r => r.json())
-            .then(s => {
-                document.getElementById('stat-distance').textContent = s.total_distance_km;
-                document.getElementById('stat-moving').textContent = s.moving_time_minutes;
-                document.getElementById('stat-idle').textContent = s.idle_time_minutes;
-                document.getElementById('stat-fuel-moving').textContent = s.moving_fuel_liters;
-                document.getElementById('stat-fuel-idle').textContent = s.idle_fuel_liters;
-                document.getElementById('stat-fuel-total').textContent = s.total_fuel_liters;
-            });
-    }
-
-    refreshStats();
-    setInterval(refreshStats, 10000);
-
-    function refreshMotorHour() {
-        fetch('/api/motor_hour')
-            .then(r => r.json())
-            .then(s => {
-                if (s && s.idle_liters_per_hour !== undefined && s.idle_liters_per_hour !== null) {
-                    document.getElementById('stat-idle-lph').textContent = s.idle_liters_per_hour;
+                
+                if (latlngs.length > 0) {
+                    const last = latlngs[latlngs.length - 1];
+                    marker.setLatLng(last);
+                    map.setView(last, 14);
                 }
-            })
-            .catch(() => {});
-    }
-    refreshMotorHour();
-    setInterval(refreshMotorHour, 30000);
-</script>
+            }
+        })
+        .catch(err => console.error("Error loading path:", err));
+}
 
+// Refresh overall stats
+function refreshOverallStats() {
+    fetch('/api/trips/stats')
+        .then(r => r.json())
+        .then(s => {
+            document.getElementById('total-distance').textContent = s.total_distance_km + ' км';
+            document.getElementById('total-moving').textContent = s.moving_time_minutes + ' мин';
+            document.getElementById('total-idle').textContent = s.idle_time_minutes + ' мин';
+            document.getElementById('total-fuel').textContent = s.total_fuel_liters + ' Л';
+            
+            // Store user efficiency for current trip calculations
+            if (s.efficiency_l_per_100km) {
+                window.userEfficiency = s.efficiency_l_per_100km;
+                // Update current trip fuel if tracking
+                if (isTracking) {
+                    updateCurrentTripStats();
+                }
+            }
+        })
+        .catch(err => console.error("Error loading stats:", err));
+}
+
+// Show notification
+function showNotification(message, type = 'info') {
+    const container = document.getElementById('notification-container');
+    const notification = document.createElement('div');
+    
+    const bgColor = type === 'success' ? 'bg-green-500' : 
+                   type === 'error' ? 'bg-red-500' : 
+                   type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+    
+    notification.className = `${bgColor} text-white px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+    notification.innerHTML = `
+        <div class="flex items-center justify-between">
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    `;
+    
+    container.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 300);
+    }, 5000);
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+    loadExistingPath();
+    refreshOverallStats();
+    
+    // Set up event listeners
+    document.getElementById('start-tracking').addEventListener('click', startTracking);
+    document.getElementById('stop-tracking').addEventListener('click', stopTracking);
+    document.getElementById('clear-path').addEventListener('click', clearPath);
+    document.getElementById('add-manual-point').addEventListener('click', addManualPoint);
+    
+    // Map type selector
+    document.getElementById('map-type').addEventListener('change', function(e) {
+        switchMapLayer(e.target.value);
+    });
+    
+    // Refresh stats every 30 seconds
+    setInterval(refreshOverallStats, 30000);
+    
+    // Show welcome message
+    setTimeout(() => {
+        showNotification('{{ _("Газрын зураг бэлэн боллоо. GPS хяналтыг эхлүүлэхийн тулд дээрх товчийг дарна уу") }}', 'info');
+    }, 1000);
+});
+</script>
 {% endblock %}

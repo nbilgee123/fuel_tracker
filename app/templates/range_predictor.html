@@ -3,184 +3,55 @@
 {% block title %}{{ _('Явах зай тооцоологч') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
 
 {% block content %}
-<style>
-.range-container {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.range-form {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin: 20px 0;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.form-input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: #3498db;
-}
-
-.form-button {
-    background: #3498db;
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.form-button:hover {
-    background: #2980b9;
-}
-
-.form-button:disabled {
-    background: #bdc3c7;
-    cursor: not-allowed;
-}
-
-.result-section {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-    border-left: 4px solid #27ae60;
-}
-
-.result-title {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.result-value {
-    font-size: 32px;
-    font-weight: bold;
-    color: #27ae60;
-    text-align: center;
-    margin: 20px 0;
-}
-
-.result-unit {
-    font-size: 16px;
-    color: #6c757d;
-    text-align: center;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin: 20px 0;
-}
-
-.stat-card {
-    background: white;
-    padding: 15px;
-    border-radius: 6px;
-    text-align: center;
-    border: 1px solid #e9ecef;
-}
-
-.stat-value {
-    font-size: 20px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 5px;
-}
-
-.stat-label {
-    color: #6c757d;
-    font-size: 12px;
-}
-
-.no-data {
-    text-align: center;
-    color: #6c757d;
-    font-style: italic;
-    padding: 40px;
-}
-
-.info-box {
-    background: #e3f2fd;
-    border: 1px solid #2196f3;
-    border-radius: 6px;
-    padding: 15px;
-    margin: 20px 0;
-    color: #1565c0;
-}
-
-.formula {
-    background: #f5f5f5;
-    padding: 15px;
-    border-radius: 6px;
-    margin: 20px 0;
-    font-family: monospace;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-</style>
-
-<div class="range-container">
-    <h2>{{ _('Явах зай тооцоологч') }}</h2>
+<div class="max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-foreground mb-2">📊 {{ _('Явах зай тооцоологч') }}</h2>
+        <p class="text-muted-foreground">{{ _('Таны тээврийн хэрэгслийн үр ашигт тулгуурлан явах зайг тооцоолно') }}</p>
+    </div>
     
     {% if not average_efficiency or total_fillups < 2 %}
-        <div class="no-data">
-            <p>{{ _('Үр ашиг тооцоолж явах зайг урьдчилан таамаглахын тулд дор хаяж 2 цэнэглэлт шаардлагатай.') }}</p>
-            <p>{{ _('Явах зай тооцоологчийг ашиглахын тулд илүү олон цэнэглэлт нэмнэ үү.') }}</p>
+        <div class="bg-card border border-border rounded-lg p-8 text-center">
+            <div class="text-muted-foreground mb-4">
+                <svg class="w-16 h-16 mx-auto mb-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <p class="text-lg font-medium">{{ _('Үр ашиг тооцоолж явах зайг урьдчилан таамаглахын тулд дор хаяж 2 цэнэглэлт шаардлагатай.') }}</p>
+                <p class="text-sm">{{ _('Явах зай тооцоологчийг ашиглахын тулд илүү олон цэнэглэлт нэмнэ үү.') }}</p>
+            </div>
         </div>
     {% else %}
         <!-- Efficiency Statistics -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">{{ "%.1f"|format(average_efficiency) }}</div>
-                <div class="stat-label">{{ _('Дундаж үр ашиг') }}</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-card border border-border rounded-lg p-6 text-center">
+                <div class="text-3xl font-bold text-primary mb-2">{{ "%.1f"|format(average_efficiency) }}</div>
+                <div class="text-sm text-muted-foreground">{{ _('Дундаж үр ашиг') }}</div>
+                <div class="text-xs text-muted-foreground">л/100км</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">{{ "%.1f"|format(best_efficiency) }}</div>
-                <div class="stat-label">{{ _('Хамгийн сайн үр ашиг') }}</div>
+            <div class="bg-card border border-border rounded-lg p-6 text-center">
+                <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{{ "%.1f"|format(best_efficiency) }}</div>
+                <div class="text-sm text-muted-foreground">{{ _('Хамгийн сайн үр ашиг') }}</div>
+                <div class="text-xs text-muted-foreground">л/100км</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">{{ "%.1f"|format(worst_efficiency) }}</div>
-                <div class="stat-label">{{ _('Хамгийн муу үр ашиг') }}</div>
+            <div class="bg-card border border-border rounded-lg p-6 text-center">
+                <div class="text-3xl font-bold text-red-600 dark:text-red-400 mb-2">{{ "%.1f"|format(worst_efficiency) }}</div>
+                <div class="text-sm text-muted-foreground">{{ _('Хамгийн муу үр ашиг') }}</div>
+                <div class="text-xs text-muted-foreground">л/100км</div>
             </div>
         </div>
 
         <!-- Range Prediction Form -->
-        <div class="range-form">
-            <h3>{{ _('Явах зайгаа тооцоолох') }}</h3>
+        <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-8">
+            <h3 class="text-xl font-semibold text-foreground mb-6">{{ _('Явах зайгаа тооцоолох') }}</h3>
             
-            <form method="POST">
-                <div class="form-group">
-                    <label for="current_fuel" class="form-label">{{ _('Одоогийн шатахууны хэмжээ (литр)') }}</label>
+            <form method="POST" class="space-y-6">
+                <div class="space-y-2">
+                    <label for="current_fuel" class="block text-sm font-medium text-foreground">
+                        {{ _('Одоогийн шатахууны хэмжээ (литр)') }}
+                    </label>
                     <input type="number" 
                            id="current_fuel" 
                            name="current_fuel" 
-                           class="form-input" 
+                           class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors" 
                            step="0.1" 
                            min="0.1" 
                            max="200" 
@@ -189,40 +60,59 @@
                            required>
                 </div>
                 
-                <button type="submit" class="form-button">
+                <button type="submit" class="w-full bg-primary text-primary-foreground font-medium py-3 px-6 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors">
                     {{ _('Явах зайг тооцоолох') }}
                 </button>
             </form>
         </div>
 
         <!-- Calculation Formula -->
-        <div class="formula">
-            <strong>{{ _('Томъёо:') }}</strong> ({{ _('Шатахууны хэмжээ') }} ÷ {{ _('Үр ашиг') }}) × 100 = {{ _('Зай (км)') }}
+        <div class="bg-muted border border-border rounded-lg p-4 mb-8">
+            <div class="text-center font-mono text-sm text-foreground">
+                <strong>{{ _('Томъёо:') }}</strong> ({{ _('Шатахууны хэмжээ') }} ÷ {{ _('Үр ашиг') }}) × 100 = {{ _('Зай (км)') }}
+            </div>
         </div>
 
         <!-- Results -->
         {% if predicted_range is not none %}
-            <div class="result-section">
-                <div class="result-title">{{ _('Урьдчилан тооцоолсон явах зай') }}</div>
-                <div class="result-value">{{ "%.0f"|format(predicted_range) }}</div>
-                <div class="result-unit">{{ _('километр') }}</div>
+            <div class="bg-card border border-border rounded-lg p-8 text-center shadow-sm mb-8">
+                <div class="text-2xl font-semibold text-foreground mb-4">{{ _('Урьдчилан тооцоолсон явах зай') }}</div>
+                <div class="text-6xl font-bold text-primary mb-2">{{ "%.0f"|format(predicted_range) }}</div>
+                <div class="text-lg text-muted-foreground mb-6">{{ _('километр') }}</div>
                 
-                <div class="info-box">
-                    <strong>{{ _('Таны дундаж үр ашиг') }} {{ "%.1f"|format(average_efficiency) }} {{ _('л/100км') }}</strong><br>
-                    {{ _('Энэ нь ойролцоолол юм. Жолоодлогын нөхцөл, газрын гадарга, ачилтаас хамааран бодит зай өөрчлөгдөж болно.') }}
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-left max-w-md mx-auto">
+                    <div class="text-sm text-blue-800 dark:text-blue-200">
+                        <strong>{{ _('Таны дундаж үр ашиг') }} {{ "%.1f"|format(average_efficiency) }} {{ _('л/100км') }}</strong><br>
+                        {{ _('Энэ нь ойролцоолол юм. Жолоодлогын нөхцөл, газрын гадарга, ачилтаас хамааран бодит зай өөрчлөгдөж болно.') }}
+                    </div>
                 </div>
             </div>
         {% endif %}
 
         <!-- Tips -->
-        <div class="info-box">
-            <strong>{{ _('Шатахууны хэмнэлтийг сайжруулах зөвлөмж:') }}</strong>
-            <ul style="margin: 10px 0; padding-left: 20px;">
-                <li>{{ _('Жигд хурд барьж, огцом хурд авах/тоормослохыг зайлсхийх') }}</li>
-                <li>{{ _('Дугуйн даралтыг зөв хэмжээнд байлгана') }}</li>
-                <li>{{ _('Хэрэгцээгүй жинг машинаас авна') }}</li>
-                <li>{{ _('Агааржуулагчийг боломжит хэмжээнд ашиглана') }}</li>
-                <li>{{ _('Боломжтой бол түгжрэл, өгсүүрээс зайлсхийх маршрутыг төлөвлөнө') }}</li>
+        <div class="bg-card border border-border rounded-lg p-6">
+            <h4 class="text-lg font-semibold text-foreground mb-4">{{ _('Шатахууны хэмнэлтийг сайжруулах зөвлөмж:') }}</h4>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+                <li class="flex items-start">
+                    <span class="text-primary mr-2">•</span>
+                    {{ _('Жигд хурд барьж, огцом хурд авах/тоормослохыг зайлсхийх') }}
+                </li>
+                <li class="flex items-start">
+                    <span class="text-primary mr-2">•</span>
+                    {{ _('Дугуйн даралтыг зөв хэмжээнд байлгана') }}
+                </li>
+                <li class="flex items-start">
+                    <span class="text-primary mr-2">•</span>
+                    {{ _('Хэрэгцээгүй жинг машинаас авна') }}
+                </li>
+                <li class="flex items-start">
+                    <span class="text-primary mr-2">•</span>
+                    {{ _('Агааржуулагчийг боломжит хэмжээнд ашиглана') }}
+                </li>
+                <li class="flex items-start">
+                    <span class="text-primary mr-2">•</span>
+                    {{ _('Боломжтой бол түгжрэл, өгсүүрээс зайлсхийх маршрутыг төлөвлөнө') }}
+                </li>
             </ul>
         </div>
     {% endif %}
