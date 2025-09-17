@@ -5,31 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ _('Шатахуун хэрэглээ хянагч') }}{% endblock %}</title>
     
-    <!-- PWA Meta Tags -->
+    <!-- Basic Meta Tags -->
     <meta name="description" content="Шатахууны хэрэглээг хянах, тооцоолох, шинжилгээ хийх апп">
     <meta name="theme-color" content="#3b82f6">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Шатахуун хянагч">
-    <meta name="msapplication-TileColor" content="#3b82f6">
-    <meta name="msapplication-config" content="/static/browserconfig.xml">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/static/manifest.json">
-    
-    <!-- PWA Icons -->
-    <link rel="icon" type="image/png" href="/static/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" href="/static/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="/static/icons/icon-192x192.png">
-    
-    <!-- Microsoft Tiles -->
-    <meta name="msapplication-TileImage" content="/static/icons/icon-144x144.png">
-    <meta name="msapplication-square70x70logo" content="/static/icons/icon-72x72.png">
-    <meta name="msapplication-square150x150logo" content="/static/icons/icon-144x144.png">
-    <meta name="msapplication-wide310x150logo" content="/static/icons/icon-192x192.png">
-    <meta name="msapplication-square310x310logo" content="/static/icons/icon-512x512.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -215,10 +193,6 @@
                             {{ _('Нүүр') }}
                         </a>
                         
-                        <!-- PWA Install Button -->
-                        <button id="install-button" class="hidden px-3 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-                            📱 {{ _('Апп суулгах') }}
-                        </button>
                         
                         <a href="{{ url_for('main.add_fillup') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
                             {{ _('Цэнэглэлт нэмэх') }}
@@ -373,78 +347,6 @@
             }
         });
 
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/static/sw.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    })
-                    .catch(function(err) {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            });
-        }
-
-        // PWA Install Prompt
-        let deferredPrompt;
-        const installButton = document.getElementById('install-button');
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
-            e.preventDefault();
-            // Stash the event so it can be triggered later
-            deferredPrompt = e;
-            // Show install button
-            if (installButton) {
-                installButton.style.display = 'block';
-            }
-        });
-
-        // Install button click handler
-        if (installButton) {
-            installButton.addEventListener('click', (e) => {
-                // Show the install prompt
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    } else {
-                        console.log('User dismissed the install prompt');
-                    }
-                    deferredPrompt = null;
-                });
-            });
-        }
-
-        // PWA Install Success
-        window.addEventListener('appinstalled', (evt) => {
-            console.log('PWA was installed');
-            if (installButton) {
-                installButton.style.display = 'none';
-            }
-        });
-
-        // Offline Detection
-        function updateOnlineStatus() {
-            const status = document.getElementById('connection-status');
-            if (navigator.onLine) {
-                if (status) {
-                    status.textContent = 'Онлайн';
-                    status.className = 'text-green-600';
-                }
-            } else {
-                if (status) {
-                    status.textContent = 'Офлайн';
-                    status.className = 'text-red-600';
-                }
-            }
-        }
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus();
     </script>
 </body>
 </html>

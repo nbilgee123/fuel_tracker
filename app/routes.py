@@ -856,33 +856,3 @@ def reset_user_password(user_id):
     
     return render_template('admin/reset_password.html', form=form, user=user)
 
-
-# PWA Routes
-@main.route('/manifest.json')
-def manifest():
-    """PWA manifest file"""
-    return send_from_directory('static', 'manifest.json', mimetype='application/json')
-
-@main.route('/sw.js')
-def service_worker():
-    """Service Worker file"""
-    return send_from_directory('static', 'sw.js', mimetype='application/javascript')
-
-@main.route('/offline')
-def offline():
-    """Offline page"""
-    return render_template('offline.html')
-
-@main.route('/api/sync-offline-data', methods=['POST'])
-@login_required
-def sync_offline_data():
-    """Sync offline data when connection is restored"""
-    try:
-        data = request.get_json()
-        offline_data = data.get('offlineData', [])
-        
-        # Process offline data here
-        # For now, just return success
-        return jsonify({'status': 'success', 'message': 'Offline data synced'})
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 500
