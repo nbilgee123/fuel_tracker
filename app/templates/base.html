@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ _('Шатахуун хэрэглээ хянагч') }}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#fdfffe',
+                        foreground: '#0a0a0a',
+                        card: '#fdfffe',
+                        'card-foreground': '#0a0a0a',
+                        primary: '#0f766e',
+                        'primary-foreground': '#ffffff',
+                        secondary: '#64748b',
+                        'secondary-foreground': '#ffffff',
+                        muted: '#f1f5f9',
+                        'muted-foreground': '#64748b',
+                        accent: '#e2e8f0',
+                        'accent-foreground': '#0f172a',
+                        destructive: '#ef4444',
+                        'destructive-foreground': '#ffffff',
+                        border: '#e2e8f0',
+                        input: '#ffffff',
+                        'input-background': '#f8fafc',
+                        ring: '#0f766e',
+                        sidebar: '#ffffff',
+                        'sidebar-foreground': '#0a0a0a',
+                        'sidebar-primary': '#0f766e',
+                        'sidebar-primary-foreground': '#ffffff',
+                        'sidebar-accent': '#f1f5f9',
+                        'sidebar-accent-foreground': '#0f172a',
+                        'sidebar-border': '#e2e8f0',
+                        'sidebar-ring': '#0f766e',
+                    },
+                    borderRadius: {
+                        'sm': '0.375rem',
+                        'md': '0.5rem',
+                        'lg': '0.625rem',
+                        'xl': '0.75rem',
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .dark {
+            --tw-bg-opacity: 1;
+            background-color: rgb(2 6 23 / var(--tw-bg-opacity));
+            --tw-text-opacity: 1;
+            color: rgb(248 250 252 / var(--tw-text-opacity));
+        }
+        .dark .bg-background { background-color: #020617; }
+        .dark .bg-card { background-color: #0f172a; }
+        .dark .text-foreground { color: #f8fafc; }
+        .dark .text-card-foreground { color: #f8fafc; }
+        .dark .border-border { border-color: #1e293b; }
+        .dark .bg-sidebar { background-color: #0f172a; }
+        .dark .border-sidebar-border { border-color: #1e293b; }
+        .dark .bg-accent { background-color: #1e293b; }
+        .dark .hover\:bg-accent:hover { background-color: #334155; }
+        /* Inputs in dark mode */
+        .dark .bg-input-background { background-color: #0b1220; }
+        .dark input,
+        .dark textarea,
+        .dark select {
+            background-color: #0b1220;
+            color: #f8fafc;
+            border-color: #1e293b;
+        }
+        .dark input::placeholder,
+        .dark textarea::placeholder {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-foreground">
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[2000] lg:hidden hidden" onclick="toggleSidebar()"></div>
+    
+    <!-- Mobile Sidebar -->
+    <div id="mobile-sidebar" class="fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border z-[2100] transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
+        <div class="flex items-center justify-between p-4 border-b border-sidebar-border">
+            <h2 class="text-lg font-semibold text-sidebar-foreground">⛽ {{ _('Шатахуун хэрэглээ хянагч') }}</h2>
+            <button onclick="toggleSidebar()" class="p-2 rounded-md hover:bg-sidebar-accent text-sidebar-foreground">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <nav class="p-4 space-y-2">
+            <a href="{{ url_for('main.index') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                {{ _('Нүүр') }}
+            </a>
+            
+            <a href="{{ url_for('main.add_fillup') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                {{ _('Цэнэглэлт нэмэх') }}
+            </a>
+            
+            <a href="{{ url_for('main.history') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {{ _('Түүх') }}
+            </a>
+            
+            <a href="{{ url_for('main.charts') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                {{ _('График') }}
+            </a>
+            
+            <a href="{{ url_for('main.range_predictor') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+                {{ _('Зай тооцоолуур') }}
+            </a>
+            
+            <a href="{{ url_for('main.vehicle_settings') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                {{ _('Тохиргоо') }}
+            </a>
+            
+            <a href="{{ url_for('main.map_view') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                </svg>
+                {{ _('Газрын зураг') }}
+            </a>
+            
+            {% if current_user.is_authenticated and current_user.is_admin %}
+            <a href="{{ url_for('main.admin_dashboard') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90 transition-colors">
+                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                {{ _('Админ панел') }}
+            </a>
+            {% endif %}
+            
+            <div class="border-t border-sidebar-border pt-4 mt-4">
+                <a href="{{ url_for('main.logout') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors">
+                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    {{ _('Гарах') }}
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="min-h-full">
+        <!-- Header -->
+        <header class="bg-card border-b border-border shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Mobile menu button -->
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Logo and title -->
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-bold text-foreground">⛽ {{ _('Шатахуун хэрэглээ хянагч') }}</h1>
+                    </div>
+                    
+                    <!-- Desktop navigation -->
+                    <nav class="hidden lg:flex items-center space-x-4">
+                        <a href="{{ url_for('main.index') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {{ _('Нүүр') }}
+                        </a>
+                        
+                        <a href="{{ url_for('main.add_fillup') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {{ _('Цэнэглэлт нэмэх') }}
+                        </a>
+                        
+                        <a href="{{ url_for('main.history') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {{ _('Түүх') }}
+                        </a>
+                        
+                        <a href="{{ url_for('main.charts') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {{ _('График') }}
+                        </a>
+                        
+                        <a href="{{ url_for('main.range_predictor') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {{ _('Зай') }}
+                        </a>
+                        
+                        <a href="{{ url_for('main.vehicle_settings') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {{ _('Тохиргоо') }}
+                        </a>
+                        
+                        <a href="{{ url_for('main.map_view') }}" class="px-3 py-2 text-sm font-medium rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {{ _('Газрын зураг') }}
+                        </a>
+                        
+                        {% if current_user.is_authenticated and current_user.is_admin %}
+                        <a href="{{ url_for('main.admin_dashboard') }}" class="px-3 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+                            {{ _('Админ') }}
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{{ url_for('main.logout') }}" class="px-3 py-2 text-sm font-medium rounded-md text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors">
+                            {{ _('Гарах') }}
+                        </a>
+                    </nav>
+                    
+                    <!-- Dark mode toggle -->
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <svg id="sun-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg id="moon-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.646-5.646z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="mb-6 space-y-3">
+                        {% for category, message in messages %}
+                            <div class="p-4 rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+                                {% if category == 'success' %}
+                                    <div class="flex items-center text-green-600 dark:text-green-400">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        {{ message }}
+                                    </div>
+                                {% elif category == 'error' %}
+                                    <div class="flex items-center text-red-600 dark:text-red-400">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                        {{ message }}
+                                    </div>
+                                {% else %}
+                                    <div class="flex items-center text-blue-600 dark:text-blue-400">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ message }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Page content -->
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        // Force LTR layout since Mongolian uses LTR script in this app
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.setAttribute('dir', 'ltr');
+            
+            // Initialize dark mode
+            if (localStorage.getItem('darkMode') === 'true' || 
+                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                updateDarkModeIcons(true);
+            }
+        });
+
+        // Sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Dark mode functionality
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            updateDarkModeIcons(isDark);
+        }
+
+        function updateDarkModeIcons(isDark) {
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            
+            if (isDark) {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        // Close sidebar when clicking on a link (mobile)
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('#mobile-sidebar a')) {
+                toggleSidebar();
+            }
+        });
+
+        // Close sidebar when pressing Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sidebar = document.getElementById('mobile-sidebar');
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    toggleSidebar();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

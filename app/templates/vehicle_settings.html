@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Тээврийн хэрэгслийн тохиргоо') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-foreground mb-2">⚙️ {{ _('Тээврийн хэрэгслийн тохиргоо') }}</h2>
+        <p class="text-muted-foreground">{{ _('Тээврийн хэрэгслийнхээ шатахууны савны багтаамж болон бусад тохиргоог тохируулна уу') }}</p>
+    </div>
+    
+    <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-6">
+        <form method="POST" class="space-y-6">
+            {{ form.hidden_tag() }}
+            
+            <div class="space-y-2">
+                <label for="{{ form.name.id }}" class="block text-sm font-medium text-foreground">
+                    {{ form.name.label.text }}
+                </label>
+                {{ form.name(
+                    class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
+                    placeholder=_("Enter vehicle name")
+                ) }}
+                {% if form.name.errors %}
+                    <div class="text-sm text-destructive">
+                        {% for error in form.name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="space-y-2">
+                <label for="{{ form.tank_capacity_liters.id }}" class="block text-sm font-medium text-foreground">
+                    {{ form.tank_capacity_liters.label.text }}
+                </label>
+                {{ form.tank_capacity_liters(
+                    class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors",
+                    placeholder=_("e.g., 50.0")
+                ) }}
+                {% if form.tank_capacity_liters.errors %}
+                    <div class="text-sm text-destructive">
+                        {% for error in form.tank_capacity_liters.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <p class="text-sm text-muted-foreground">{{ _('Үлдсэн шатахуун болон зайны тооцоололд ашиглана') }}</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                {{ form.submit(
+                    class="flex-1 bg-primary text-primary-foreground font-medium py-2 px-4 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors"
+                ) }}
+                
+                <a href="{{ url_for('main.index') }}" 
+                   class="flex-1 bg-secondary text-secondary-foreground font-medium py-2 px-4 rounded-md hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors text-center">
+                    {{ _('Цуцлах') }}
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    {% if vehicle %}
+    <div class="bg-muted border border-border rounded-lg p-6">
+        <div class="flex items-center mb-4">
+            <div class="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-full mr-3">
+                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+            </div>
+            <h4 class="text-lg font-semibold text-foreground">{{ _('Одоогийн тохиргоо') }}</h4>
+        </div>
+        <div class="space-y-2 text-sm text-muted-foreground">
+            <div class="flex justify-between">
+                <span class="font-medium">{{ _('Тээврийн хэрэгсэл:') }}</span>
+                <span class="text-foreground">{{ vehicle.name }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="font-medium">{{ _('Савны багтаамж:') }}</span>
+                <span class="text-foreground">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="font-medium">{{ _('Сүүлд шинэчилсэн:') }}</span>
+                <span class="text-foreground">{{ vehicle.updated_at.strftime("%Y-%m-%d %H:%M") }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('Машин удирдах') }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-foreground">{{ _('Машин удирдах') }}</h1>
+                <p class="text-muted-foreground mt-2">{{ _('Бүх хэрэглэгчдийн машины тохиргоо') }}</p>
+            </div>
+            <a href="{{ url_for('main.admin_dashboard') }}" class="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+                {{ _('Буцах') }}
+            </a>
+        </div>
+    </div>
+
+    <!-- Vehicles Table -->
+    <div class="bg-card border border-border rounded-lg shadow-sm">
+        <div class="p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-border">
+                            <th class="text-left py-3 px-4 font-medium text-foreground">{{ _('ID') }}</th>
+                            <th class="text-left py-3 px-4 font-medium text-foreground">{{ _('Хэрэглэгч') }}</th>
+                            <th class="text-left py-3 px-4 font-medium text-foreground">{{ _('Машины нэр') }}</th>
+                            <th class="text-left py-3 px-4 font-medium text-foreground">{{ _('Танкийн хүчин чадал (л)') }}</th>
+                            <th class="text-left py-3 px-4 font-medium text-foreground">{{ _('Сүүлд шинэчлэгдсэн') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in vehicles %}
+                        <tr class="border-b border-border hover:bg-muted/50">
+                            <td class="py-3 px-4 text-foreground">{{ vehicle.id }}</td>
+                            <td class="py-3 px-4 text-foreground font-medium">{{ vehicle.user.license_number }}</td>
+                            <td class="py-3 px-4 text-foreground">{{ vehicle.name }}</td>
+                            <td class="py-3 px-4 text-foreground">{{ "%.1f"|format(vehicle.tank_capacity_liters) }}</td>
+                            <td class="py-3 px-4 text-muted-foreground">{{ vehicle.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Цэнэглэлтийн түүх') }} - {{ _('Цэнэглэлтийн түүх') }}{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <div class="text-center">
+        <h2 class="text-3xl font-bold text-foreground mb-2">📋 {{ _('Цэнэглэлтийн түүх') }}</h2>
+        <p class="text-muted-foreground">{{ _('Цэнэглэлтийн түүхийг харах') }}</p>
+    </div>
+    
+    {% if fillups %}
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт цэнэглэлт') }}</p>
+                        <p class="text-2xl font-bold text-foreground">{{ fillups|length }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">{{ _('Замын урт') }}</p>
+                        <p class="text-2xl font-bold text-foreground">
+                            {% if fillups|length > 1 %}
+                                {% set distance = fillups[-1].odometer_km - fillups[0].odometer_km %}
+                                {{ distance|round|int }} км
+                            {% else %}
+                                -- км
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="p-3 bg-green-100 dark:bg-green-900/20 rounded-full">
+                        <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт шатахуун') }}</p>
+                        <p class="text-2xl font-bold text-foreground">
+                            {% set total_fuel = 0 %}
+                            {% for fillup in fillups %}
+                                {% set total_fuel = total_fuel + fillup.fuel_liters %}
+                            {% endfor %}
+                            {{ total_fuel|round(1) }} л
+                        </p>
+                    </div>
+                    <div class="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-full">
+                        <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fill-ups Table -->
+        <div class="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-muted border-b border-border">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Огноо') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Хурдны хэмжүүр') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Түлш') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Үнэ/л') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Нийт үнэ') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Хэрэглээ') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Тэмдэглэл') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ _('Үйлдэл') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border">
+                        {% for fillup in fillups %}
+                            <tr class="hover:bg-muted/50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div>
+                                        <div class="text-sm font-medium text-foreground">{{ fillup.date.strftime('%Y-%m-%d') }}</div>
+                                        <div class="text-sm text-muted-foreground">{{ fillup.date.strftime('%A') }}</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground font-medium">
+                                    {{ fillup.odometer_km|round|int }} км
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                                    {{ fillup.fuel_liters|round(1) }} л
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                                    ₮{{ fillup.price_per_liter|round(2) }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-destructive">
+                                    ₮{{ fillup.total_cost|round(2) }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {% set efficiency = fillup.calculate_efficiency() %}
+                                    {% if efficiency %}
+                                        <div class="text-sm font-medium text-green-600 dark:text-green-400">{{ efficiency|round(1) }}</div>
+                                        <div class="text-xs text-muted-foreground">л/100км</div>
+                                    {% else %}
+                                        <span class="text-sm text-muted-foreground">--</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {% if fillup.notes %}
+                                        <div class="max-w-xs truncate text-sm text-muted-foreground" title="{{ fillup.notes }}">
+                                            {{ fillup.notes }}
+                                        </div>
+                                    {% else %}
+                                        <span class="text-sm text-muted-foreground">--</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <form method="POST" action="{{ url_for('main.delete_fillup', id=fillup.id) }}" 
+                                          onsubmit="return confirm('{{ _('Энэ цэнэглэлтийг устгах уу?') }}')" 
+                                          class="inline">
+                                        <button type="submit" class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-3 py-1 rounded-md text-xs font-medium transition-colors">
+                                            🗑️ {{ _('Устгах') }}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="text-center">
+            <a href="{{ url_for('main.add_fillup') }}" 
+               class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                {{ _('Шинэ цэнэглэлт нэмэх') }}
+            </a>
+        </div>
+        
+    {% else %}
+        <!-- No fill-ups yet -->
+        <div class="text-center py-12">
+            <div class="mx-auto max-w-md">
+                <div class="mx-auto h-12 w-12 text-muted-foreground mb-4">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-foreground mb-2">{{ _('Одоогоор цэнэглэлт байхгүй') }}</h3>
+                <p class="text-muted-foreground mb-6">{{ _('Эхний цэнэглэлтээ нэмж шатахууны хэрэглээгээ хяж эхлээрэй!') }}</p>
+                <a href="{{ url_for('main.add_fillup') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    {{ _('Эхний цэнэглэлт нэмэх') }}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
