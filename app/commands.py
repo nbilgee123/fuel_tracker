@@ -11,7 +11,7 @@ def init_app(app):
         with app.app_context():
             try:
                 # Admin хэрэглэгч байгаа эсэхийг шалгах
-                existing_admin = User.query.filter_by(license_number='0000ADMIN').first()
+                existing_admin = User.query.filter_by(license_number='0000АДМ').first()
                 
                 if existing_admin:
                     print("⚠️ Admin хэрэглэгч аль хэдийн байна!")
@@ -20,7 +20,7 @@ def init_app(app):
                     return
                 
                 # Шинэ admin хэрэглэгч үүсгэх
-                admin = User(license_number='0000ADMIN')
+                admin = User(license_number='0000АДМ')
                 admin.set_password('admin123')
                 admin.is_admin = True
                 
@@ -28,7 +28,7 @@ def init_app(app):
                 db.session.commit()
                 
                 print("✅ Admin хэрэглэгч амжилттай үүсгэгдлээ!")
-                print(f"   Улсын дугаар: 0000ADMIN")
+                print(f"   Улсын дугаар: 0000АДМ")
                 print(f"   Нууц үг: admin123")
                 print(f"   Админ эрх: Тийм")
                 print("\n🌐 Одоо https://fuel-tracker-spt6.onrender.com/login руу орж нэвтэрч болно!")
@@ -43,14 +43,14 @@ def init_app(app):
         with app.app_context():
             try:
                 # Admin хэрэглэгч байгаа эсэхийг шалгах
-                existing_admin = User.query.filter_by(license_number='0000ADMIN').first()
+                existing_admin = User.query.filter_by(license_number='0000АДМ').first()
                 
                 if existing_admin:
                     print("⚠️ Admin хэрэглэгч аль хэдийн байна!")
                     return
                 
                 # Шинэ admin хэрэглэгч үүсгэх
-                admin = User(license_number='0000ADMIN')
+                admin = User(license_number='0000АДМ')
                 admin.set_password('admin123')
                 admin.is_admin = True
                 

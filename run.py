@@ -4,15 +4,15 @@ from app.models import User
 def create_admin_if_not_exists():
     """Admin хэрэглэгч байхгүй бол үүсгэх"""
     try:
-        admin = User.query.filter_by(license_number='0000ADMIN').first()
+        admin = User.query.filter_by(license_number='0000АДМ').first()
         if not admin:
-            admin = User(license_number='0000ADMIN')
+            admin = User(license_number='0000АДМ')
             admin.set_password('admin123')
             admin.is_admin = True
             db.session.add(admin)
             db.session.commit()
             print("✅ Admin хэрэглэгч үүсгэгдлээ!")
-            print("   Улсын дугаар: 0000ADMIN")
+            print("   Улсын дугаар: 0000АДМ")
             print("   Нууц үг: admin123")
         else:
             print("ℹ️ Admin хэрэглэгч аль хэдийн байна.")
