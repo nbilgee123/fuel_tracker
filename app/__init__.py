@@ -44,6 +44,10 @@ def create_app():
     # Import models AFTER db is initialized to avoid circular imports
     from app import models
     
+    # Import commands
+    from app.commands import init_app
+    init_app(app)
+    
     @login_manager.user_loader
     def load_user(user_id):
         from app.models import User
