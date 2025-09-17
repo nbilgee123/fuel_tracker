@@ -33,9 +33,25 @@ A Flask-based fuel consumption tracking application with support for multiple la
    pip install -r requirements.txt
    ```
 
-4. **Initialize the database**:
+4. **Database Setup**:
+   
+   **For Local Development (SQLite)**:
    ```bash
    python init_db.py
+   ```
+   
+   **For Production (PostgreSQL)**:
+   ```bash
+   # Set environment variable
+   export DATABASE_URL="postgresql://user:password@host:port/database"
+   
+   # Migrate to PostgreSQL
+   python migrate_to_postgresql.py
+   ```
+
+5. **Test Database Connection**:
+   ```bash
+   python test_database.py
    ```
 
 ## Running the Application

@@ -12,8 +12,16 @@ class Config:
     except Exception:
         pass
 
-    # Database configuration (store DB under instance/ for persistence)
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(INSTANCE_DIR, 'fuel_tracker.db')
+    # Database configuration
+    # PostgreSQL (production) эсвэл SQLite (development)
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:
+        # PostgreSQL (Render.com дээр)
+        SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    else:
+        # SQLite (local development)
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(INSTANCE_DIR, 'fuel_tracker.db')
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Secret key for forms
