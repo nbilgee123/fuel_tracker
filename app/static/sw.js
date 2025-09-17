@@ -2,11 +2,9 @@
 const CACHE_NAME = 'fuel-tracker-v1.0.0';
 const urlsToCache = [
   '/',
-  '/static/css/style.css',
-  '/static/js/app.js',
   '/static/icons/icon-192x192.png',
   '/static/icons/icon-512x512.png',
-  '/manifest.json'
+  '/static/manifest.json'
 ];
 
 // Install event - cache resources
