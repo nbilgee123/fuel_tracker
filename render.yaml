@@ -1,0 +1,24 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: fuel-tracker-db
+    env: postgresql
+    plan: free
+    region: singapore
+
+  # Flask Web Application
+  - type: web
+    name: fuel-tracker-web
+    env: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: fuel-tracker-db
+          property: connectionString
