@@ -22,16 +22,21 @@ def create_admin_if_not_exists():
 # Create the Flask application
 app = create_app()
 
-with app.app_context():
-    db.create_all()
-    print("Database tables created successfully!")
-    
-    # Admin хэрэглэгч үүсгэх (production дээр)
-    create_admin_if_not_exists()
+# Initialize database and create admin user
+def init_app():
+    with app.app_context():
+        db.create_all()
+        print("Database tables created successfully!")
+        
+        # Admin хэрэглэгч үүсгэх (production дээр)
+        create_admin_if_not_exists()
+
+# Initialize the app
+init_app()
 
 if __name__ == '__main__':
     import os
-    host = os.getenv("HOST", "0.0.0.0")  # Changed from "127.0.0.1" to "0.0.0.0"
+    host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", "5000"))
     debug = os.getenv("DEBUG", "1") == "1"
     app.run(host=host, port=port, debug=debug)
