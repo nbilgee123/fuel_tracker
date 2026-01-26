@@ -5,8 +5,8 @@
 {% block content %}
 <div class="max-w-2xl mx-auto">
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-foreground mb-2">⚙️ {{ _('Тээврийн хэрэгслийн тохиргоо') }}</h2>
-        <p class="text-muted-foreground">{{ _('Тээврийн хэрэгслийнхээ шатахууны савны багтаамж болон бусад тохиргоог тохируулна уу') }}</p>
+        <h2 class="text-xl md:text-3xl font-bold text-foreground mb-2">⚙️ {{ _('Тээврийн хэрэгслийн тохиргоо') }}</h2>
+        <p class="text-sm md:text-base text-muted-foreground">{{ _('Тээврийн хэрэгслийнхээ шатахууны савны багтаамж болон бусад тохиргоог тохируулна уу') }}</p>
     </div>
     
     <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-6">
@@ -62,27 +62,27 @@
     </div>
     
     {% if vehicle %}
-    <div class="bg-muted border border-border rounded-lg p-6">
+    <div class="bg-muted border border-border rounded-lg p-6 dark:bg-blue-900/20">
         <div class="flex items-center mb-4">
             <div class="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-full mr-3">
                 <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                 </svg>
             </div>
-            <h4 class="text-lg font-semibold text-foreground">{{ _('Одоогийн тохиргоо') }}</h4>
+            <h4 class="text-base md:text-lg font-semibold text-foreground">{{ _('Одоогийн тохиргоо') }}</h4>
         </div>
-        <div class="space-y-2 text-sm text-muted-foreground">
+        <div class="space-y-2 text-sm text-muted-foreground dark:text-gray-300">
             <div class="flex justify-between">
-                <span class="font-medium">{{ _('Тээврийн хэрэгсэл:') }}</span>
-                <span class="text-foreground">{{ vehicle.name }}</span>
+                <span class="font-medium dark:text-white">{{ _('Тээврийн хэрэгсэл:') }}</span>
+                <span class="text-foreground dark:text-white">{{ vehicle.name }}</span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium">{{ _('Савны багтаамж:') }}</span>
-                <span class="text-foreground">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</span>
+                <span class="font-medium dark:text-white">{{ _('Савны багтаамж:') }}</span>
+                <span class="text-foreground dark:text-white">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium">{{ _('Сүүлд шинэчилсэн:') }}</span>
-                <span class="text-foreground">{{ vehicle.updated_at.strftime("%Y-%m-%d %H:%M") }}</span>
+                <span class="font-medium dark:text-white">{{ _('Сүүлд шинэчилсэн:') }}</span>
+                <span class="text-foreground dark:text-white">{{ vehicle.updated_at.strftime("%Y-%m-%d %H:%M") }}</span>
             </div>
         </div>
     </div>
