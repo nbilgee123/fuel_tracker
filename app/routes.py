@@ -334,6 +334,7 @@ def vehicle_settings():
         try:
             # Update vehicle settings
             vehicle.name = form.name.data
+            vehicle.fuel_type = form.fuel_type.data
             vehicle.tank_capacity_liters = form.tank_capacity_liters.data
             vehicle.updated_at = datetime.utcnow()
             
@@ -348,6 +349,7 @@ def vehicle_settings():
     elif request.method == 'GET':
         # Pre-populate form with current values
         form.name.data = vehicle.name
+        form.fuel_type.data = vehicle.fuel_type
         form.tank_capacity_liters.data = vehicle.tank_capacity_liters
     
     return render_template('vehicle_settings.html', form=form, vehicle=vehicle)
@@ -856,3 +858,93 @@ def reset_user_password(user_id):
     
     return render_template('admin/reset_password.html', form=form, user=user)
 
+
+@main.route('/vehicle_chart')
+@login_required
+def vehicle_chart():
+    """Display vehicles grouped by fuel type with statistics and filtering"""
+    
+    # Get selected fuel type from query parameter
+    selected_fuel_type = request.args.get('fuel_type', 'all')
+    
+    # Get all users
+    all_users = User.query.all()
+    
+    # Build statistics for all vehicles and group by fuel type
+    all_vehicles_stats = []
+    fuel_types_dict = {}
+    
+    for user in all_users:
+        vehicle = Vehicle.get_current_vehicle(user.id)
+        fillups = FillUp.query.filter_by(user_id=user.id).order_by(FillUp.date.asc()).all()
+        
+        # Calculate statistics
+        vehicle_stats = {
+            'user_id': user.id,
+            'vehicle_id': vehicle.id,
+            'name': vehicle.name,
+            'fuel_type': vehicle.fuel_type,
+            'tank_capacity': vehicle.tank_capacity_liters,
+            'total_fillups': len(fillups),
+            'total_spent': sum(f.total_cost for f in fillups),
+            'total_liters': sum(f.fuel_liters for f in fillups),
+            'average_cost': (sum(f.total_cost for f in fillups) / len(fillups)) if fillups else 0,
+            'average_price_per_liter': (sum(f.price_per_liter for f in fillups) / len(fillups)) if fillups else 0,
+            'average_efficiency': FillUp.get_average_efficiency(user.id),
+            'fillups': fillups,
+        }
+        all_vehicles_stats.append(vehicle_stats)
+        
+        # Group by fuel type
+        fuel_type = vehicle.fuel_type
+        if fuel_type not in fuel_types_dict:
+            fuel_types_dict[fuel_type] = {
+                'vehicles': [],
+                'total_vehicles': 0,
+                'total_fillups': 0,
+                'total_spent': 0,
+                'total_liters': 0,
+                'average_price_per_liter': 0,
+                'average_efficiency_values': []
+            }
+        
+        fuel_types_dict[fuel_type]['vehicles'].append(vehicle_stats)
+        fuel_types_dict[fuel_type]['total_vehicles'] += 1
+        fuel_types_dict[fuel_type]['total_fillups'] += vehicle_stats['total_fillups']
+        fuel_types_dict[fuel_type]['total_spent'] += vehicle_stats['total_spent']
+        fuel_types_dict[fuel_type]['total_liters'] += vehicle_stats['total_liters']
+        if vehicle_stats['average_price_per_liter'] > 0:
+            fuel_types_dict[fuel_type]['average_price_per_liter'] += vehicle_stats['average_price_per_liter']
+        if vehicle_stats['average_efficiency']:
+            fuel_types_dict[fuel_type]['average_efficiency_values'].append(vehicle_stats['average_efficiency'])
+    
+    # Calculate fuel type statistics
+    fuel_types_list = []
+    for fuel_type, data in fuel_types_dict.items():
+        avg_price = data['average_price_per_liter'] / data['total_vehicles'] if data['total_vehicles'] > 0 else 0
+        avg_eff = sum(data['average_efficiency_values']) / len(data['average_efficiency_values']) if data['average_efficiency_values'] else 0
+        
+        fuel_types_list.append({
+            'fuel_type': fuel_type,
+            'total_vehicles': data['total_vehicles'],
+            'total_fillups': data['total_fillups'],
+            'total_spent': data['total_spent'],
+            'total_liters': data['total_liters'],
+            'average_price_per_liter': avg_price,
+            'average_efficiency': avg_eff,
+            'vehicles': data['vehicles']
+        })
+    
+    # Filter by selected fuel type
+    if selected_fuel_type != 'all':
+        filtered_vehicles = [v for v in all_vehicles_stats if v['fuel_type'] == selected_fuel_type]
+        fuel_type_data = next((f for f in fuel_types_list if f['fuel_type'] == selected_fuel_type), None)
+    else:
+        filtered_vehicles = all_vehicles_stats
+        fuel_type_data = None
+    
+    return render_template('vehicle_chart.html', 
+                         all_vehicles=filtered_vehicles,
+                         fuel_types=fuel_types_list,
+                         selected_fuel_type=selected_fuel_type,
+                         fuel_type_data=fuel_type_data)

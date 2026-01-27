@@ -43,6 +43,9 @@ class Vehicle(db.Model):
     # Fuel tank capacity in liters
     tank_capacity_liters = db.Column(db.Float, nullable=False, default=50.0)
     
+    # Fuel type (Petrol, Diesel, LPG, CNG, Electric, Hybrid)
+    fuel_type = db.Column(db.String(50), nullable=False, default="Petrol")
+    
     # Date when settings were last updated
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
