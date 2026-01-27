@@ -17,7 +17,8 @@ def seed_admin_user():
                 return
             
             # Шинэ admin хэрэглэгч үүсгэх
-            admin = User(license_number='0000АДМ')
+            admin = User()
+            admin.license_number = '0000АДМ'
             admin.set_password('admin123')
             admin.is_admin = True
             

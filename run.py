@@ -6,7 +6,8 @@ def create_admin_if_not_exists():
     try:
         admin = User.query.filter_by(license_number='0000АДМ').first()
         if not admin:
-            admin = User(license_number='0000АДМ')
+            admin = User()
+            admin.license_number = '0000АДМ'
             admin.set_password('admin123')
             admin.is_admin = True
             db.session.add(admin)

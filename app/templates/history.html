@@ -5,8 +5,8 @@
 {% block content %}
 <div class="space-y-8">
     <div class="text-center">
-        <h2 class="text-3xl font-bold text-foreground mb-2">📋 {{ _('Цэнэглэлтийн түүх') }}</h2>
-        <p class="text-muted-foreground">{{ _('Цэнэглэлтийн түүхийг харах') }}</p>
+        <h2 class="text-xl md:text-3xl font-bold text-foreground mb-2">📋 {{ _('Цэнэглэлтийн түүх') }}</h2>
+        <p class="text-sm md:text-base text-muted-foreground">{{ _('Цэнэглэлтийн түүхийг харах') }}</p>
     </div>
     
     {% if fillups %}
@@ -16,7 +16,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт цэнэглэлт') }}</p>
-                        <p class="text-2xl font-bold text-foreground">{{ fillups|length }}</p>
+                        <p class="text-lg md:text-2xl font-bold text-foreground">{{ fillups|length }}</p>
                     </div>
                     <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
                         <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-muted-foreground">{{ _('Замын урт') }}</p>
-                        <p class="text-2xl font-bold text-foreground">
+                        <p class="text-lg md:text-2xl font-bold text-foreground">
                             {% if fillups|length > 1 %}
                                 {% set distance = fillups[-1].odometer_km - fillups[0].odometer_km %}
                                 {{ distance|round|int }} км
@@ -51,7 +51,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт шатахуун') }}</p>
-                        <p class="text-2xl font-bold text-foreground">
+                        <p class="text-lg md:text-2xl font-bold text-foreground">
                             {% set total_fuel = 0 %}
                             {% for fillup in fillups %}
                                 {% set total_fuel = total_fuel + fillup.fuel_liters %}

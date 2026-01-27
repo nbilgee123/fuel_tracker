@@ -5,8 +5,8 @@
 {% block content %}
 <div class="max-w-4xl mx-auto">
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-foreground mb-2">📊 {{ _('Явах зай тооцоологч') }}</h2>
-        <p class="text-muted-foreground">{{ _('Таны тээврийн хэрэгслийн үр ашигт тулгуурлан явах зайг тооцоолно') }}</p>
+        <h2 class="text-xl md:text-3xl font-bold text-foreground mb-2">📊 {{ _('Явах зай тооцоологч') }}</h2>
+        <p class="text-sm md:text-base text-muted-foreground">{{ _('Таны тээврийн хэрэгслийн үр ашигт тулгуурлан явах зайг тооцоолно') }}</p>
     </div>
     
     {% if not average_efficiency or total_fillups < 2 %}
@@ -15,33 +15,33 @@
                 <svg class="w-16 h-16 mx-auto mb-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                 </svg>
-                <p class="text-lg font-medium">{{ _('Үр ашиг тооцоолж явах зайг урьдчилан таамаглахын тулд дор хаяж 2 цэнэглэлт шаардлагатай.') }}</p>
-                <p class="text-sm">{{ _('Явах зай тооцоологчийг ашиглахын тулд илүү олон цэнэглэлт нэмнэ үү.') }}</p>
+                <p class="text-base md:text-lg font-medium">{{ _('Үр ашиг тооцоолж явах зайг урьдчилан таамаглахын тулд дор хаяж 2 цэнэглэлт шаардлагатай.') }}</p>
+                <p class="text-xs md:text-sm">{{ _('Явах зай тооцоологчийг ашиглахын тулд илүү олон цэнэглэлт нэмнэ үү.') }}</p>
             </div>
         </div>
     {% else %}
         <!-- Efficiency Statistics -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-card border border-border rounded-lg p-6 text-center">
-                <div class="text-3xl font-bold text-primary mb-2">{{ "%.1f"|format(average_efficiency) }}</div>
-                <div class="text-sm text-muted-foreground">{{ _('Дундаж үр ашиг') }}</div>
+                <div class="text-lg md:text-3xl font-bold text-primary mb-2">{{ "%.1f"|format(average_efficiency) }}</div>
+                <div class="text-xs md:text-sm text-muted-foreground">{{ _('Дундаж үр ашиг') }}</div>
                 <div class="text-xs text-muted-foreground">л/100км</div>
             </div>
             <div class="bg-card border border-border rounded-lg p-6 text-center">
-                <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{{ "%.1f"|format(best_efficiency) }}</div>
-                <div class="text-sm text-muted-foreground">{{ _('Хамгийн сайн үр ашиг') }}</div>
+                <div class="text-lg md:text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{{ "%.1f"|format(best_efficiency) }}</div>
+                <div class="text-xs md:text-sm text-muted-foreground">{{ _('Хамгийн сайн үр ашиг') }}</div>
                 <div class="text-xs text-muted-foreground">л/100км</div>
             </div>
             <div class="bg-card border border-border rounded-lg p-6 text-center">
-                <div class="text-3xl font-bold text-red-600 dark:text-red-400 mb-2">{{ "%.1f"|format(worst_efficiency) }}</div>
-                <div class="text-sm text-muted-foreground">{{ _('Хамгийн муу үр ашиг') }}</div>
+                <div class="text-lg md:text-3xl font-bold text-red-600 dark:text-red-400 mb-2">{{ "%.1f"|format(worst_efficiency) }}</div>
+                <div class="text-xs md:text-sm text-muted-foreground">{{ _('Хамгийн муу үр ашиг') }}</div>
                 <div class="text-xs text-muted-foreground">л/100км</div>
             </div>
         </div>
 
         <!-- Range Prediction Form -->
         <div class="bg-card border border-border rounded-lg p-6 shadow-sm mb-8">
-            <h3 class="text-xl font-semibold text-foreground mb-6">{{ _('Явах зайгаа тооцоолох') }}</h3>
+            <h3 class="text-base md:text-xl font-semibold text-foreground mb-6">{{ _('Явах зайгаа тооцоолох') }}</h3>
             
             <form method="POST" class="space-y-6">
                 <div class="space-y-2">
@@ -68,7 +68,7 @@
 
         <!-- Calculation Formula -->
         <div class="bg-muted border border-border rounded-lg p-4 mb-8">
-            <div class="text-center font-mono text-sm text-foreground">
+            <div class="text-center font-mono text-xs md:text-sm text-foreground">
                 <strong>{{ _('Томъёо:') }}</strong> ({{ _('Шатахууны хэмжээ') }} ÷ {{ _('Үр ашиг') }}) × 100 = {{ _('Зай (км)') }}
             </div>
         </div>
@@ -76,12 +76,12 @@
         <!-- Results -->
         {% if predicted_range is not none %}
             <div class="bg-card border border-border rounded-lg p-8 text-center shadow-sm mb-8">
-                <div class="text-2xl font-semibold text-foreground mb-4">{{ _('Урьдчилан тооцоолсон явах зай') }}</div>
-                <div class="text-6xl font-bold text-primary mb-2">{{ "%.0f"|format(predicted_range) }}</div>
-                <div class="text-lg text-muted-foreground mb-6">{{ _('километр') }}</div>
+                <div class="text-lg md:text-2xl font-semibold text-foreground mb-4">{{ _('Урьдчилан тооцоолсон явах зай') }}</div>
+                <div class="text-4xl md:text-6xl font-bold text-primary mb-2">{{ "%.0f"|format(predicted_range) }}</div>
+                <div class="text-base md:text-lg text-muted-foreground mb-6">{{ _('километр') }}</div>
                 
                 <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-left max-w-md mx-auto">
-                    <div class="text-sm text-blue-800 dark:text-blue-200">
+                    <div class="text-xs md:text-sm text-blue-800 dark:text-blue-200">
                         <strong>{{ _('Таны дундаж үр ашиг') }} {{ "%.1f"|format(average_efficiency) }} {{ _('л/100км') }}</strong><br>
                         {{ _('Энэ нь ойролцоолол юм. Жолоодлогын нөхцөл, газрын гадарга, ачилтаас хамааран бодит зай өөрчлөгдөж болно.') }}
                     </div>
@@ -91,8 +91,8 @@
 
         <!-- Tips -->
         <div class="bg-card border border-border rounded-lg p-6">
-            <h4 class="text-lg font-semibold text-foreground mb-4">{{ _('Шатахууны хэмнэлтийг сайжруулах зөвлөмж:') }}</h4>
-            <ul class="space-y-2 text-sm text-muted-foreground">
+            <h4 class="text-base md:text-lg font-semibold text-foreground mb-4">{{ _('Шатахууны хэмнэлтийг сайжруулах зөвлөмж:') }}</h4>
+            <ul class="space-y-2 text-xs md:text-sm text-muted-foreground">
                 <li class="flex items-start">
                     <span class="text-primary mr-2">•</span>
                     {{ _('Жигд хурд барьж, огцом хурд авах/тоормослохыг зайлсхийх') }}
