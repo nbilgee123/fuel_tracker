@@ -20,6 +20,9 @@ def update_database():
     
     try:
         # Check if user table exists
+        default_license = "0000AAA"
+        default_password_hash = "pbkdf2:sha256:600000$default$default_hash"
+        
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='user'")
         if not cursor.fetchone():
             print("Creating user table...")
@@ -33,8 +36,6 @@ def update_database():
             """)
             
             # Create a default user for existing data
-            default_license = "0000AAA"
-            default_password_hash = "pbkdf2:sha256:600000$default$default_hash"
             cursor.execute("""
                 INSERT INTO user (license_number, password_hash, created_at)
                 VALUES (?, ?, ?)

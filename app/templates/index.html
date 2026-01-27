@@ -4,10 +4,10 @@
 <div class="space-y-8">
     <!-- Welcome Section -->
     <div class="text-center">
-        <p class="text-lg text-muted-foreground mb-4">{{ _('Тавтай Морил,') }} <span class="font-semibold text-foreground">{{ current_user.license_number }}</span></p>
+        <p class="text-base md:text-lg text-muted-foreground mb-4">{{ _('Тавтай Морил,') }} <span class="font-semibold text-foreground">{{ current_user.license_number }}</span></p>
         
-        <h2 class="text-3xl font-bold text-foreground mb-4">{{ _('Шатахуун хянах самбар') }}</h2>
-        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">{{ _('Шатахууны хэрэглээгээ хянаж, тээврийн хэрэгслийн хэрэглээг бүртгэх') }}</p>
+        <h2 class="text-xl md:text-3xl font-bold text-foreground mb-4">{{ _('Шатахуун хянах самбар') }}</h2>
+        <p class="text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto">{{ _('Шатахууны хэрэглээгээ хянаж, тээврийн хэрэгслийн хэрэглээг бүртгэх') }}</p>
     </div>
 
     <!-- Quick Stats Cards -->
@@ -16,7 +16,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт цэнэглэлт') }}</p>
-                    <p class="text-2xl font-bold text-foreground">{{ total_fillups }}</p>
+                    <p class="text-lg md:text-2xl font-bold text-foreground">{{ total_fillups }}</p>
                 </div>
                 <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
                     <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">{{ _('Шатахуун зарцуулалт') }}</p>
-                    <p class="text-2xl font-bold text-foreground">
+                    <p class="text-lg md:text-2xl font-bold text-foreground">
                         {% if average_efficiency %}
                             {{ "%.1f"|format(average_efficiency) }} L/100km
                         {% else %}
@@ -50,7 +50,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">{{ _('Нийт Зарцуулсан') }}</p>
-                    <p class="text-2xl font-bold text-foreground">₮{{ "%.2f"|format(total_spent) }}</p>
+                    <p class="text-lg md:text-2xl font-bold text-foreground">₮{{ "%.2f"|format(total_spent) }}</p>
                 </div>
                 <div class="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-full">
                     <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                 </svg>
             </div>
-            <h3 class="text-xl font-semibold text-foreground">{{ _('Одоогийн шатахууны түвшин') }}</h3>
+            <h3 class="text-lg md:text-xl font-semibold text-foreground">{{ _('Одоогийн шатахууны түвшин') }}</h3>
         </div>
         
         <!-- Interactive Fuel Gauge -->
@@ -105,7 +105,7 @@
                         </svg>
                         <!-- Center Content -->
                         <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <div class="text-3xl font-bold text-foreground">{{ "%.1f"|format(fuel_status.remaining_fuel) }}</div>
+                            <div class="text-xl md:text-3xl font-bold text-foreground">{{ "%.1f"|format(fuel_status.remaining_fuel) }}</div>
                             <div class="text-sm text-muted-foreground">L</div>
                             <div class="text-lg font-semibold text-primary">{{ "%.0f"|format(fuel_status.fuel_percentage) }}%</div>
                         </div>
@@ -156,12 +156,12 @@
                 <div class="flex flex-col space-y-4">
                     <div class="text-center">
                         <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Савны багтаамж') }}</p>
-                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</p>
+                        <p class="text-lg md:text-2xl font-bold text-blue-600 dark:text-blue-400">{{ "%.1f"|format(vehicle.tank_capacity_liters) }} L</p>
                     </div>
                     
                     <div class="text-center">
                         <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Урьдчилан таамаглах зам') }}</p>
-                        <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ "%.0f"|format(fuel_status.predicted_range) }} km</p>
+                        <p class="text-lg md:text-2xl font-bold text-orange-600 dark:text-orange-400">{{ "%.0f"|format(fuel_status.predicted_range) }} km</p>
                     </div>
                 </div>
             </div>
@@ -278,8 +278,8 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Цэнэглэлтийн түүх') }}</h3>
-                <p class="text-muted-foreground">{{ _('Түүхийн цэнэглэлтийн түүхийг харах') }}</p>
+                <h3 class="text-base md:text-lg font-semibold text-foreground mb-2">{{ _('Цэнэглэлтийн түүх') }}</h3>
+                <p class="text-xs md:text-sm text-muted-foreground">{{ _('Түүхийн цэнэглэлтийн түүхийг харах') }}</p>
             </div>
         </a>
 
@@ -292,8 +292,8 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Аналитик') }}</h3>
-                <p class="text-muted-foreground">{{ _('Цэнэглэлтийн үнэмлэл') }}</p>
+                <h3 class="text-base md:text-lg font-semibold text-foreground mb-2">{{ _('Аналитик') }}</h3>
+                <p class="text-xs md:text-sm text-muted-foreground">{{ _('Цэнэглэлтийн үнэмлэл') }}</p>
             </div>
         </a>
 
@@ -306,8 +306,8 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-foreground mb-2">{{ _('Газрын Зураг харах') }}</h3>
-                <p class="text-muted-foreground">{{ _('Цэнэглэлтийн байршлыг харах') }}</p>
+                <h3 class="text-base md:text-lg font-semibold text-foreground mb-2">{{ _('Газрын Зураг харах') }}</h3>
+                <p class="text-xs md:text-sm text-muted-foreground">{{ _('Цэнэглэлтийн байршлыг харах') }}</p>
             </div>
         </a>
     </div>
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const circumference = 2 * Math.PI * radius;
         const offset = circumference * (1 - fuelPercentage / 100);
         
-        fuelGaugeCircle.style.strokeDasharray = circumference;
+        fuelGaugeCircle.style.strokeDasharray = circumference;d
         fuelGaugeCircle.style.strokeDashoffset = circumference;
         
         // Animate the fill
