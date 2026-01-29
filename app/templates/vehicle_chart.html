@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Бүх машинууд') }} - {{ _('Шатахуун хянагч') }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-foreground mb-2">📊 {{ _('Бүх машинууд') }}</h2>
+        <p class="text-sm md:text-base text-muted-foreground">{{ _('Нийт бүртгэлтэй машинуудын цэнэглэлтийн мэдээлэл ба статистик') }}</p>
+    </div>
+
+    <!-- Fuel Type Dropdown -->
+    <div class="flex justify-center mb-8">
+        <div class="w-full md:w-64">
+            <label for="fuel_type_select" class="block text-sm font-medium text-foreground mb-2">{{ _('Шатахууны төрлөөр харах') }}</label>
+            <select id="fuel_type_select" 
+                    onchange="location.href='{{ url_for('main.vehicle_chart') }}?fuel_type=' + this.value;" 
+                    class="w-full px-4 py-2 border border-border rounded-lg bg-card text-foreground focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="all" {% if selected_fuel_type == 'all' %}selected{% endif %}>{{ _('Бүх шатахуун') }}</option>
+                {% for fuel_type in fuel_types %}
+                <option value="{{ fuel_type.fuel_type }}" {% if selected_fuel_type == fuel_type.fuel_type %}selected{% endif %}>
+                    {% if fuel_type.fuel_type == 'Petrol' %}{{ _('Бензин') }}
+                    {% elif fuel_type.fuel_type == 'Diesel' %}{{ _('Дизель') }}
+                    {% elif fuel_type.fuel_type == 'Electric' %}{{ _('Цахилгаан') }}
+                    {% elif fuel_type.fuel_type == 'Hybrid' %}{{ _('Hybrid') }}
+                    {% else %}{{ fuel_type.fuel_type }}{% endif %} ({{ fuel_type.total_vehicles }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Fuel Type Stats -->
+    {% if fuel_type_data %}
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8">
+        <h3 class="text-lg font-bold text-foreground mb-4">
+            {% if fuel_type_data.fuel_type == 'Petrol' %}{{ _('Бензин') }}
+            {% elif fuel_type_data.fuel_type == 'Diesel' %}{{ _('Дизель') }}
+            {% elif fuel_type_data.fuel_type == 'Electric' %}{{ _('Цахилгаан') }}
+            {% elif fuel_type_data.fuel_type == 'Hybrid' %}{{ _('Hybrid') }}
+            {% else %}{{ fuel_type_data.fuel_type }}{% endif %} - {{ _('Статистик') }}
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-slate-900 rounded-lg p-4">
+                <p class="text-xs text-muted-foreground mb-1">{{ _('Машинууд') }}</p>
+                <p class="text-2xl font-bold text-foreground">{{ fuel_type_data.total_vehicles }}</p>
+            </div>
+            
+            <div class="bg-white dark:bg-slate-900 rounded-lg p-4">
+                <p class="text-xs text-muted-foreground mb-1">{{ _('Нийт цэнэглэлт') }}</p>
+                <p class="text-2xl font-bold text-blue-600">{{ fuel_type_data.total_fillups }}</p>
+            </div>
+            
+            <div class="bg-white dark:bg-slate-900 rounded-lg p-4">
+                <p class="text-xs text-muted-foreground mb-1">{{ _('Нийт шатахуун') }}</p>
+                <p class="text-2xl font-bold text-green-600">{{ "%.1f"|format(fuel_type_data.total_liters) }} <span class="text-sm">L</span></p>
+            </div>
+            
+            <div class="bg-white dark:bg-slate-900 rounded-lg p-4">
+                <p class="text-xs text-muted-foreground mb-1">{{ _('Нийт зарцуулсан') }}</p>
+                <p class="text-2xl font-bold text-orange-600">₮{{ "%.0f"|format(fuel_type_data.total_spent) }}</p>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 mt-4">
+            <div class="bg-white dark:bg-slate-900 rounded-lg p-4">
+                <p class="text-xs text-muted-foreground mb-1">{{ _('Дундаж үнэ (л тутамд)') }}</p>
+                <p class="text-xl font-bold text-foreground">₮{{ "%.0f"|format(fuel_type_data.average_price_per_liter) }}</p>
+            </div>
+            
+            <div class="bg-white dark:bg-slate-900 rounded-lg p-4">
+                <p class="text-xs text-muted-foreground mb-1">{{ _('Дундаж үр ашиг') }}</p>
+                <p class="text-xl font-bold text-foreground">
+                    {% if fuel_type_data.average_efficiency %}
+                        {{ "%.1f"|format(fuel_type_data.average_efficiency) }} <span class="text-sm">L/100km</span>
+                    {% else %}
+                        <span class="text-sm">--</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-card border border-border rounded-lg p-6 shadow-sm">
+            <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Нийт машинууд') }}</p>
+            <p class="text-3xl font-bold text-primary">{{ all_vehicles|length }}</p>
+        </div>
+        
+        <div class="bg-card border border-border rounded-lg p-6 shadow-sm">
+            <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Нийт цэнэглэлт') }}</p>
+            <p class="text-3xl font-bold text-blue-600">{{ all_vehicles|map(attribute='total_fillups')|sum }}</p>
+        </div>
+        
+        <div class="bg-card border border-border rounded-lg p-6 shadow-sm">
+            <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Нийт шатахуун') }}</p>
+            <p class="text-3xl font-bold text-green-600">{{ "%.1f"|format(all_vehicles|map(attribute='total_liters')|sum) }} <span class="text-sm">L</span></p>
+        </div>
+        
+        <div class="bg-card border border-border rounded-lg p-6 shadow-sm">
+            <p class="text-sm font-medium text-muted-foreground mb-2">{{ _('Нийт зарцуулсан') }}</p>
+            <p class="text-3xl font-bold text-orange-600">₮{{ "%.0f"|format(all_vehicles|map(attribute='total_spent')|sum) }}</p>
+        </div>
+    </div>
+
+    <!-- Vehicles Grid -->
+    {% if all_vehicles %}
+    <div class="space-y-8">
+        {% for vehicle in all_vehicles %}
+        <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+            <!-- Vehicle Header -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 pb-6 border-b border-border">
+                <div>
+                    <h3 class="text-xl md:text-2xl font-bold text-foreground mb-2">{{ vehicle.name }}</h3>
+                    <div class="flex flex-wrap gap-4 text-sm">
+                        <div>
+                            <span class="text-muted-foreground">{{ _('Шатахууны төрөл:') }}</span>
+                            <span class="font-medium text-foreground ml-2">
+                                {% if vehicle.fuel_type == 'Petrol' %}{{ _('Бензин') }}
+                                {% elif vehicle.fuel_type == 'Diesel' %}{{ _('Дизель') }}
+                                {% elif vehicle.fuel_type == 'Electric' %}{{ _('Цахилгаан') }}
+                                {% elif vehicle.fuel_type == 'Hybrid' %}{{ _('Hybrid') }}
+                                {% else %}{{ vehicle.fuel_type }}{% endif %}
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-muted-foreground">{{ _('Савны багтаамж:') }}</span>
+                            <span class="font-medium text-foreground ml-2">{{ "%.1f"|format(vehicle.tank_capacity) }} L</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vehicle Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-muted/50 rounded-lg p-4">
+                    <p class="text-xs text-muted-foreground mb-1">{{ _('Нийт цэнэглэлт') }}</p>
+                    <p class="text-2xl font-bold text-foreground">{{ vehicle.total_fillups }}</p>
+                </div>
+                
+                <div class="bg-muted/50 rounded-lg p-4">
+                    <p class="text-xs text-muted-foreground mb-1">{{ _('Нийт шатахуун') }}</p>
+                    <p class="text-2xl font-bold text-foreground">{{ "%.1f"|format(vehicle.total_liters) }} <span class="text-sm">L</span></p>
+                </div>
+                
+                <div class="bg-muted/50 rounded-lg p-4">
+                    <p class="text-xs text-muted-foreground mb-1">{{ _('Дундаж үр ашиг') }}</p>
+                    <p class="text-2xl font-bold text-foreground">
+                        {% if vehicle.average_efficiency %}
+                            {{ "%.1f"|format(vehicle.average_efficiency) }} <span class="text-sm">L/100km</span>
+                        {% else %}
+                            <span class="text-sm">--</span>
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <div class="bg-muted/50 rounded-lg p-4">
+                    <p class="text-xs text-muted-foreground mb-1">{{ _('Нийт зарцуулсан') }}</p>
+                    <p class="text-2xl font-bold text-foreground">₮{{ "%.0f"|format(vehicle.total_spent) }}</p>
+                </div>
+            </div>
+
+            <!-- Cost Details -->
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-6 p-4 bg-muted/30 rounded-lg">
+                <div>
+                    <p class="text-sm text-muted-foreground mb-1">{{ _('Дундаж цэнэглэлтийн үнэ') }}</p>
+                    <p class="text-lg font-semibold text-foreground">₮{{ "%.0f"|format(vehicle.average_cost) }}</p>
+                </div>
+                
+                <div>
+                    <p class="text-sm text-muted-foreground mb-1">{{ _('Дундаж үнэ (л тутамд)') }}</p>
+                    <p class="text-lg font-semibold text-foreground">₮{{ "%.0f"|format(vehicle.average_price_per_liter) }}</p>
+                </div>
+            </div>
+
+            <!-- Fuel History -->
+            {% if vehicle.fillups %}
+            <div class="mt-6">
+                <h4 class="text-base font-semibold text-foreground mb-4">{{ _('Сүүлийн цэнэглэлтүүд') }}</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs md:text-sm">
+                        <thead>
+                            <tr class="border-b border-border">
+                                <th class="text-left py-2 px-3 font-medium text-muted-foreground">{{ _('Огноо') }}</th>
+                                <th class="text-right py-2 px-3 font-medium text-muted-foreground">{{ _('Одометр') }}</th>
+                                <th class="text-right py-2 px-3 font-medium text-muted-foreground">{{ _('Шатахуун') }}</th>
+                                <th class="text-right py-2 px-3 font-medium text-muted-foreground">{{ _('Үнэ / л') }}</th>
+                                <th class="text-right py-2 px-3 font-medium text-muted-foreground">{{ _('Нийт үнэ') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fillup in vehicle.fillups[-5:]|reverse %}
+                            <tr class="border-b border-border hover:bg-muted/50 transition-colors">
+                                <td class="py-2 px-3 text-foreground">{{ fillup.date.strftime("%Y-%m-%d") }}</td>
+                                <td class="py-2 px-3 text-right text-foreground">{{ "%.1f"|format(fillup.odometer_km) }} km</td>
+                                <td class="py-2 px-3 text-right text-foreground">{{ "%.1f"|format(fillup.fuel_liters) }} L</td>
+                                <td class="py-2 px-3 text-right text-foreground">₮{{ "%.0f"|format(fillup.price_per_liter) }}</td>
+                                <td class="py-2 px-3 text-right font-medium text-foreground">₮{{ "%.0f"|format(fillup.total_cost) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="mt-6 p-4 bg-muted/30 rounded-lg text-center">
+                <p class="text-sm text-muted-foreground">{{ _('Цэнэглэлтийн бүртгэл байхгүй') }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-12 bg-card border border-border rounded-lg">
+        <svg class="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+        </svg>
+        <p class="text-muted-foreground">{{ _('Машины бүртгэл байхгүй байна') }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="flex justify-center">
+        <a href="{{ url_for('main.index') }}" class="inline-flex items-center px-6 py-3 bg-secondary text-secondary-foreground font-medium rounded-lg hover:bg-secondary/90 transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            {{ _('Буцах') }}
+        </a>
+    </div>
+</div>
+{% endblock %}

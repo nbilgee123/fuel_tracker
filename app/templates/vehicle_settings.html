@@ -31,6 +31,22 @@
             </div>
             
             <div class="space-y-2">
+                <label for="{{ form.fuel_type.id }}" class="block text-sm font-medium text-foreground">
+                    {{ form.fuel_type.label.text }}
+                </label>
+                {{ form.fuel_type(
+                    class="w-full px-3 py-2 border border-border rounded-md bg-input-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
+                ) }}
+                {% if form.fuel_type.errors %}
+                    <div class="text-sm text-destructive">
+                        {% for error in form.fuel_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="space-y-2">
                 <label for="{{ form.tank_capacity_liters.id }}" class="block text-sm font-medium text-foreground">
                     {{ form.tank_capacity_liters.label.text }}
                 </label>
@@ -75,6 +91,16 @@
             <div class="flex justify-between">
                 <span class="font-medium dark:text-white">{{ _('Тээврийн хэрэгсэл:') }}</span>
                 <span class="text-foreground dark:text-white">{{ vehicle.name }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="font-medium dark:text-white">{{ _('Шатахууны төрөл:') }}</span>
+                <span class="text-foreground dark:text-white">
+                    {% if vehicle.fuel_type == 'Petrol' %}{{ _('Бензин') }}
+                    {% elif vehicle.fuel_type == 'Diesel' %}{{ _('Дизель') }}
+                    {% elif vehicle.fuel_type == 'Electric' %}{{ _('Цахилгаан') }}
+                    {% elif vehicle.fuel_type == 'Hybrid' %}{{ _('Hybrid') }}
+                    {% else %}{{ vehicle.fuel_type }}{% endif %}
+                </span>
             </div>
             <div class="flex justify-between">
                 <span class="font-medium dark:text-white">{{ _('Савны багтаамж:') }}</span>

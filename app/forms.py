@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import FloatField, DateField, TextAreaField, SubmitField, StringField, BooleanField, PasswordField
+from wtforms import FloatField, DateField, TextAreaField, SubmitField, StringField, BooleanField, PasswordField, SelectField
 from wtforms.validators import DataRequired, NumberRange, Optional, Length, Regexp, EqualTo, ValidationError
 from flask_babel import gettext as _
 from datetime import date
@@ -69,6 +69,16 @@ class VehicleSettingsForm(FlaskForm):
     name = StringField(_('Машины нэр'), 
                       validators=[DataRequired()],
                       render_kw={"placeholder": _("жишээ: Миний машин, Гэр бүлийн SUV")})
+    
+    # Шатахууны төрөл
+    fuel_type = SelectField(_('Шатахууны төрөл'), 
+                           choices=[
+                               ('Petrol', _('Бензин')),
+                               ('Diesel', _('Дизель')),
+                               ('Electric', _('Цахилгаан')),
+                               ('Hybrid', _('Hybrid'))
+                           ],
+                           validators=[DataRequired()])
     
     # Шатахууны савны хүчин чадал (литр)
     tank_capacity_liters = FloatField(_('Шатахууны савны хүчин чадал (л)'), 
